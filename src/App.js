@@ -39,7 +39,7 @@ const App = () => {
   };
 
   const handleNextFrame = () => {
-    console.log('frame rate is', frameRate);
+    console.log('the frame rate is', frameRate);
     console.log('current frame is : ', currentFrame, 'The value of (currentFrame + 1) / frameRate is:', ((currentFrame + 1) / frameRate));
     playerRef.current.seekTo(playerRef.current.getCurrentTime() + 1 / frameRate, 'seconds');
     setCurrentFrame(prevFrame => prevFrame + 1);
