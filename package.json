@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.2",
     "opencv.js": "^1.2.1",
@@ -12,7 +13,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-player": "^2.13.0",
+    "react-redux": "^9.0.2",
     "react-scripts": "^5.0.1",
+    "redux": "^5.0.0",
     "video.js": "^8.6.1",
     "web-vitals": "^2.1.4"
   },
