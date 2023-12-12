@@ -17,8 +17,8 @@ import {
     currentFrame: 0,
     keyframes: [],
     keyframeBool: {
-      keyFrameInActive: true,
-      keyFrameOutActive: false,
+      keyFrameInActive: false,
+      keyFrameOutActive: true,
     },
   };
   
