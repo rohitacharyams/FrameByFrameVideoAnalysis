@@ -1,11 +1,16 @@
 
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
 import { setNumOfFramesToSkip, setCurrentFrame, setFrameRate } from '../redux/actions';
 
 const VideoPlayer = ({ videoInfo, frameRate, currentFrame, numOfFramesToSkip, setCurrentFrame, setNumOfFramesToSkip }) => {
   const playerRef = useRef(null);
+  const [playbackRate, setPlaybackRate] = useState(1);
+
+  const handleSpeedChange = (speed) => {
+    setPlaybackRate(speed);
+  };
 
   const handleSeek = (e) => {
     setCurrentFrame(Math.floor(e.playedSeconds * frameRate));
@@ -19,9 +24,7 @@ const VideoPlayer = ({ videoInfo, frameRate, currentFrame, numOfFramesToSkip, se
   const handleNextFrame = () => {
     console.log(currentFrame, numOfFramesToSkip, videoInfo, frameRate);
     playerRef.current.seekTo(playerRef.current.getCurrentTime() + numOfFramesToSkip / frameRate, 'seconds');
-    console.log("jii");
     setCurrentFrame((prevFrame) => prevFrame + numOfFramesToSkip);
-    console.log("jii");
   };
 
   const handlePrevFrame = () => {
@@ -55,6 +58,17 @@ const VideoPlayer = ({ videoInfo, frameRate, currentFrame, numOfFramesToSkip, se
       <div>
         <button onClick={handleNextFrame}>Next Frame</button>
         <button onClick={handlePrevFrame}>Previous Frame</button>
+      </div>
+
+      <div>
+        <button onClick={() => handleSpeedChange(0.5)}>0.5x</button>
+        <button onClick={() => handleSpeedChange(0.75)}>0.75x</button>
+        <button onClick={() => handleSpeedChange(1)}>1x</button>
+        <button onClick={() => handleSpeedChange(1.25)}>1.25x</button>
+        <button onClick={() => handleSpeedChange(1.5)}>1.5x</button>
+        <button onClick={() => handleSpeedChange(2)}>2x</button>
+        <button onClick={() => handleSpeedChange(2.5)}>2.5x</button>
+        {/* Add more buttons as needed */}
       </div>
 
       <p>Current Frame: {currentFrame}</p>

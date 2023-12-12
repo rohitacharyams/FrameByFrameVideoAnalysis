@@ -22,6 +22,22 @@ const Keyframes = ({ currentFrame, keyframes, keyframeBool, setKeyframes, setKey
     setKeyframeBool({ keyFrameInActive: false, keyFrameOutActive: true });
   };
 
+  const handleLabellingDone = () => {
+    // Assuming you have a backend endpoint for saving keyframes
+    fetch('http://localhost:5000/save_keyframes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ keyframes }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Keyframes saved successfully:', data);
+      })
+      .catch(error => console.error('Error saving keyframes:', error));
+  };
+
   return (
     <div>
       <button onClick={handleAddKeyframeIn} disabled={!keyframeBool.keyFrameOutActive}>
@@ -39,6 +55,11 @@ const Keyframes = ({ currentFrame, keyframes, keyframeBool, setKeyframes, setKey
           ))}
         </ul>
       </div>
+
+      <div>
+        <button onClick={handleLabellingDone}>Labelling Done</button>
+      </div>
+
     </div>
   );
 };
