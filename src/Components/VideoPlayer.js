@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
-import { setNumOfFramesToSkip, setCurrentFrame, setFrameRate } from '../redux/actions';
+import { setNumOfFramesToSkip, setCurrentFrame, setFrameRate, setVideoFilename } from '../redux/actions';
 
 const VideoPlayer = ({ videoInfo, frameRate, currentFrame, numOfFramesToSkip, setCurrentFrame, setNumOfFramesToSkip }) => {
   const playerRef = useRef(null);

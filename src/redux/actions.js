@@ -5,10 +5,16 @@ export const SET_NUM_OF_FRAMES_TO_SKIP = 'SET_NUM_OF_FRAMES_TO_SKIP';
 export const SET_CURRENT_FRAME = 'SET_CURRENT_FRAME';
 export const SET_KEYFRAMES = 'SET_KEYFRAMES';
 export const SET_KEYFRAME_BOOL = 'SET_KEYFRAME_BOOL';
+export const SET_VIDEO_FILENAME = 'SET_VIDEO_FILENAME'
 
 export const setVideoInfo = (videoInfo) => ({
   type: SET_VIDEO_INFO,
   payload: videoInfo,
+});
+
+export const setVideoFilename = (videoFilename) => ({
+  type: SET_VIDEO_FILENAME,
+  payload: videoFilename,
 });
 
 export const setFrameRate = (frameRate) => ({

@@ -1,16 +1,16 @@
 // components/FileInput.js
 import React from 'react';
 import { connect } from 'react-redux';
-import { setVideoInfo, setFrameRate } from '../redux/actions';
+import { setVideoInfo, setFrameRate, setVideoFilename } from '../redux/actions';
 
-const FileInput = ({ setVideoInfo, setFrameRate }) => {
+const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
     if (file) {
       const formData = new FormData();
       formData.append('video', file);
-
+      setVideoFilename(file.name);
       fetch('http://localhost:5000/upload', {
         method: 'POST',
         body: formData,
@@ -33,6 +33,7 @@ const FileInput = ({ setVideoInfo, setFrameRate }) => {
                  const frameRate = parseInt(data.frameRate);
                  setFrameRate(frameRate);
                  console.log('the final value of data is', data);
+                 console.log(file.name)
                  console.log('frame_rate', data.frameRate);})
             .catch(error => console.error('Error getting frame rate:', error));
         })
@@ -50,11 +51,13 @@ const FileInput = ({ setVideoInfo, setFrameRate }) => {
 const mapStateToProps = (state) => ({
     frameRate : state.frameRate,
     videoInfo : state.setVideoInfo,
+    videoFilename: state.videoFilename,
   });
 
 const mapDispatchToProps = {
   setVideoInfo,
   setFrameRate,
+  setVideoFilename,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FileInput);

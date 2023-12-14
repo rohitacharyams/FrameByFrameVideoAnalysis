@@ -6,6 +6,7 @@ import {
     SET_CURRENT_FRAME,
     SET_KEYFRAMES,
     SET_KEYFRAME_BOOL,
+    SET_VIDEO_FILENAME,
   } from './actions';
   
   const initialState = {
@@ -20,16 +21,18 @@ import {
       keyFrameInActive: false,
       keyFrameOutActive: true,
     },
+    videoFilename: '',
   };
   
   const rootReducer = (state = initialState, action) => {
     switch (action.type) {
       case SET_VIDEO_INFO:
-        console.log('SET_VIDEO_INFO action dispatched with payload:', action.payload);
         return { ...state, videoInfo: action.payload };
       case SET_FRAME_RATE:
-        console.log('SET_FRAME_RATE action dispatched with payload:', action.payload);
         return {...state, frameRate: action.payload};
+      case SET_VIDEO_FILENAME:
+        console.log('SET_VIDEO_FILENAME action dispatched with payload:', action.payload);
+        return {...state, videoFilename: action.payload};
       case SET_NUM_OF_FRAMES_TO_SKIP:
         return { ...state, numOfFramesToSkip: action.payload };
       case SET_CURRENT_FRAME:

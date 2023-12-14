@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import { setKeyframes, setKeyframeBool } from '../redux/actions';
 
-const Keyframes = ({ currentFrame, keyframes, keyframeBool, setKeyframes, setKeyframeBool }) => {
+const Keyframes = ({ currentFrame, keyframes, videoFilename, keyframeBool, setKeyframes, setKeyframeBool }) => {
   const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useState({keyFrameInFrameNmber:currentFrame, keyFrameOutFrameNmber:currentFrame});
   const handleAddKeyframeIn = () => {
     if(KeyFrameTypeNumber.keyFrameOutFrameNmber === currentFrame)
@@ -36,13 +36,14 @@ const Keyframes = ({ currentFrame, keyframes, keyframeBool, setKeyframes, setKey
   };
 
   const handleLabellingDone = () => {
-    // Assuming you have a backend endpoint for saving keyframes
+
+    console.log(videoFilename);
     fetch('http://localhost:5000/save_keyframes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ keyframes }),
+      body: JSON.stringify({ keyframes, video_filename: videoFilename }),
     })
       .then(response => response.json())
       .then(data => {
@@ -81,6 +82,7 @@ const mapStateToProps = (state) => ({
   currentFrame: state.currentFrame,
   keyframes: state.keyframes,
   keyframeBool: state.keyframeBool,
+  videoFilename: state.videoFilename,
 });
 
 const mapDispatchToProps = {
