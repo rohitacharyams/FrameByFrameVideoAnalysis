@@ -7,6 +7,8 @@ import {
     SET_KEYFRAMES,
     SET_KEYFRAME_BOOL,
     SET_VIDEO_FILENAME,
+    SET_THUMBNAIL_URL,
+    SET_STEP_FRAMES,
   } from './actions';
   
   const initialState = {
@@ -15,17 +17,21 @@ import {
     },
     frameRate: 1,
     numOfFramesToSkip: 1,
-    currentFrame: 0,
+    currentFrame: 1,
     keyframes: [],
     keyframeBool: {
       keyFrameInActive: false,
       keyFrameOutActive: true,
     },
     videoFilename: '',
+    thumbnailUrl: '',
+    stepFrames: {startFrame: 1, endFrame: 1},
   };
   
   const rootReducer = (state = initialState, action) => {
     switch (action.type) {
+      case SET_STEP_FRAMES:
+        return {...state, stepFrames: action.payload};
       case SET_VIDEO_INFO:
         return { ...state, videoInfo: action.payload };
       case SET_FRAME_RATE:
@@ -41,6 +47,8 @@ import {
         return { ...state, keyframes: action.payload };
       case SET_KEYFRAME_BOOL:
         return { ...state, keyframeBool: action.payload };
+      case SET_THUMBNAIL_URL:
+        return { ...state, thumbnailUrl: action.payload };
       default:
         return state;
     }

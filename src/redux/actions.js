@@ -5,7 +5,19 @@ export const SET_NUM_OF_FRAMES_TO_SKIP = 'SET_NUM_OF_FRAMES_TO_SKIP';
 export const SET_CURRENT_FRAME = 'SET_CURRENT_FRAME';
 export const SET_KEYFRAMES = 'SET_KEYFRAMES';
 export const SET_KEYFRAME_BOOL = 'SET_KEYFRAME_BOOL';
-export const SET_VIDEO_FILENAME = 'SET_VIDEO_FILENAME'
+export const SET_VIDEO_FILENAME = 'SET_VIDEO_FILENAME';
+export const SET_THUMBNAIL_URL = 'SET_THUMBNAIL_URL';
+export const SET_STEP_FRAMES = 'SET_STEP_FRAMES';
+
+export const setStepFrames = (startFrame, endFrame) => ({
+  type: SET_STEP_FRAMES,
+  payload: { startFrame, endFrame },
+});
+
+export const setThumbnailUrl = (thumbnailUrl) => ({
+  type: SET_THUMBNAIL_URL,
+  payload: thumbnailUrl,
+});
 
 export const setVideoInfo = (videoInfo) => ({
   type: SET_VIDEO_INFO,

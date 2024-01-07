@@ -1,7 +1,7 @@
 // components/FileInput.js
 import React from 'react';
 import { connect } from 'react-redux';
-import { setVideoInfo, setFrameRate, setVideoFilename } from '../redux/actions';
+import { setVideoInfo, setFrameRate, setVideoFilename, setThumbnailUrl } from '../redux/actions';
 
 const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
   const handleFileChange = (event) => {
@@ -20,6 +20,8 @@ const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
             setVideoInfo({
                 videoUrl: data.videoUrl,
               });
+            setThumbnailUrl(data.thumbnailUrl);
+            console.log('Heyyyyyyyyyyyyyyyyyyyyy');
             console.log(data);
             fetch(`http://localhost:5000/get_frame_info`, {
             method: 'POST',
@@ -32,8 +34,8 @@ const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
             .then(data =>{
                  const frameRate = parseInt(data.frameRate);
                  setFrameRate(frameRate);
-                 console.log('the final value of data is', data);
-                 console.log(file.name)
+                //  console.log('the final value of data is', data);
+                //  console.log(file.name)
                  console.log('frame_rate', data.frameRate);})
             .catch(error => console.error('Error getting frame rate:', error));
         })
@@ -52,12 +54,14 @@ const mapStateToProps = (state) => ({
     frameRate : state.frameRate,
     videoInfo : state.setVideoInfo,
     videoFilename: state.videoFilename,
+    thumbnailUrl: state.thumbnailUrl,
   });
 
 const mapDispatchToProps = {
   setVideoInfo,
   setFrameRate,
   setVideoFilename,
+  setThumbnailUrl,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FileInput);

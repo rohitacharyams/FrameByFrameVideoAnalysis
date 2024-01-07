@@ -5,6 +5,7 @@ import React from 'react';
 import FileInput from './Components/FileInput';
 import VideoPlayer from './Components/VideoPlayer';
 import Keyframes from './Components/Keyframes';
+import Timeline from './Components/TimeLine';
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <h1>Video Editor App</h1>
       <FileInput />
       <VideoPlayer />
+      {/* <Timeline /> */}
       <Keyframes />
     </div>
   );
