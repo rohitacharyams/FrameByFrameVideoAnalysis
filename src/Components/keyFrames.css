@@ -1,0 +1,22 @@
+.video-player-container {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    width: 30%;
+    height: 60vh; /* Adjusts the height of the container */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .player-wrapper {
+    flex: 0 0 70%; /* Adjust this value to change the player's height */
+    width: 100%;
+  }
+  
+  .controls-wrapper {
+    flex: 1;
+    width: 100%;
+    overflow-y: auto; /* Allows controls to scroll if they don't fit */
+  }
+  

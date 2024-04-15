@@ -8,10 +8,22 @@ export const SET_KEYFRAME_BOOL = 'SET_KEYFRAME_BOOL';
 export const SET_VIDEO_FILENAME = 'SET_VIDEO_FILENAME';
 export const SET_THUMBNAIL_URL = 'SET_THUMBNAIL_URL';
 export const SET_STEP_FRAMES = 'SET_STEP_FRAMES';
+export const SET_VIDEO_STATE = 'SET_VIDEO_STATE';
+export const UPDATE_DISPLAYED_STEP = 'UPDATE_DISPLAYED_STEP';
 
 export const setStepFrames = (startFrame, endFrame) => ({
   type: SET_STEP_FRAMES,
   payload: { startFrame, endFrame },
+});
+
+export const updateDisplayedStep = (frameNumber) => ({
+  type: UPDATE_DISPLAYED_STEP,
+  payload: { frameNumber },
+});
+
+export const setVideoState = (currentState, frame) => ({
+  type: SET_VIDEO_STATE,
+  payload: {currentState, frame}
 });
 
 export const setThumbnailUrl = (thumbnailUrl) => ({

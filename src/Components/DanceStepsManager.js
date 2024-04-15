@@ -1,8 +1,13 @@
 // DanceStepsManager.js
 import React from 'react';
 import { Button } from '@mui/material';
+import { usePlayer } from './PlayerContext';
+
 
 const DanceStepsManager = ({ danceSteps, onPlayStep }) => {
+  
+  const { playerRef } = usePlayer();
+
   return (
     <div>
       <h3>Dance Steps:</h3>

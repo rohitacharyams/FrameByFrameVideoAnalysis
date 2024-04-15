@@ -1,10 +1,14 @@
 // components/VideoPlayer.js
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createContext } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
-import { setNumOfFramesToSkip, setCurrentFrame, setStepFrames } from '../redux/actions';
+import { setVideoInfo, setNumOfFramesToSkip, setCurrentFrame, setStepFrames, setVideoState, setVideoFilename } from '../redux/actions';
 import { Slider, Button, Typography, Grid, Box, Container, ThemeProvider, createTheme } from '@mui/material';
+import { VideoPlayerContext } from './VideoPlayerContext';
+import { usePlayer } from './PlayerContext';
+import axios from 'axios';
+
 
 const theme = createTheme({
   palette: {
@@ -26,8 +30,15 @@ const VideoPlayer = ({
   setNumOfFramesToSkip,
   setStepFrames,
   stepFrames,
+  setVideoState,
+  videoState,
+  setVideoInfo,
+  setVideoFilename,
+  videoFilename,
 }) => {
-  const playerRef = useRef(null);
+  // const playerRef = useRef(null);
+  const { playerRef } = usePlayer();
+  const playerContainerRef = useRef(null);
   const canvasRef = useRef(null);
   const [playbackRate, setPlaybackRate] = useState(1);
 
@@ -37,12 +48,28 @@ const VideoPlayer = ({
   const play = () => setPlaying(true);
   const pause = () => setPlaying(false);
 
+  const getCurrentTime = () => {
+    return playerRef.current ? playerRef.current.getCurrentTime() : 0;
+};
+
+
+  const [loopCount, setLoopCount] = useState(0);
+
   const handleSpeedChange = (speed) => {
     setPlaybackRate(speed);
   };
 
+  const handleProgress = (state) => {
+    // Assuming frameRate is frames per second, and state.playedSeconds gives the current playback time in seconds
+    const frameNumber = Math.floor(state.playedSeconds * frameRate);
+    setCurrentFrame(frameNumber);
+    console.log("value of current frame is", currentFrame, frameNumber);
+     // Dispatch action to update current frame in the Redux store
+  };
+
   const handleSeek = (e) => {
     setCurrentFrame(Math.floor(e.playedSeconds * frameRate));
+    console.log("value of current frame is", currentFrame);
   };
 
   const handleNumberOfFrames = (e) => {
@@ -95,83 +122,143 @@ const VideoPlayer = ({
     drawTimeline();
   }, [frameRate]);
 
-  useEffect(() => {
-    // Check if stepFrames is defined and not an empty object
-    if (stepFrames && Object.keys(stepFrames).length !== 0) {
-      // Play the specific step from startFrame to endFrame
-      playerRef.current.seekTo(stepFrames.startFrame / frameRate, 'seconds');
-      const duration = (stepFrames.endFrame - stepFrames.startFrame) / frameRate;
-      play();
-      setTimeout(() => {
-        pause();
-        setPlayerVisibility(false);
-      }, duration * 1000);
+  const handleFullScreen = () => {
+    console.log("Entered here");
+    if (playerContainerRef.current) {
+      if (playerContainerRef.current.requestFullscreen) {
+        playerContainerRef.current.requestFullscreen();
+      } else if (playerContainerRef.current.mozRequestFullScreen) { /* Firefox */
+        playerContainerRef.current.mozRequestFullScreen();
+      } else if (playerContainerRef.current.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        playerContainerRef.current.webkitRequestFullscreen();
+      } else if (playerContainerRef.current.msRequestFullscreen) { 
+        console.log("Here");/* IE/Edge */
+        playerContainerRef.current.msRequestFullscreen();
+      }
+      playerContainerRef.current.style.width = '100%';
+      playerContainerRef.current.style.height = '100%';
     }
-  }, [stepFrames]);
+  };
+
+  // Function to play a particular step from frame A to frame B
+  const playStepFrames = (stepFrames) => {
+    if (stepFrames && Object.keys(stepFrames).length !== 0) {
+
+    const startSeconds = stepFrames.startFrame / frameRate;
+    const endSeconds = stepFrames.endFrame / frameRate;
+
+    console.log("Start and end frames are", stepFrames.startFrame, stepFrames.endFrame, startSeconds, endSeconds);
+
+    playerRef.current.seekTo(startSeconds, 'seconds');
+    setPlaying(true);
+    // handleFullScreen();
+
+    const interval = setInterval(() => {
+      // console.log("current time is:", playerRef.current.getCurrentTime());
+      if (playerRef.current.getCurrentTime() >= endSeconds) {
+        setPlaying(false);
+        clearInterval(interval);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }
+};
+
+// Step Wise Player
+  useEffect(() => {
+    playStepFrames(stepFrames);
+  }, [stepFrames, playbackRate]);
+
+  useEffect(() => {
+    console.log("current frame in this component is :", currentFrame);
+
+    if (playerRef.current && videoState.frame === 1) {
+      console.log("Playing the video");
+      playerRef.current.getInternalPlayer().play(); // Pause the video
+    }
+    else if (playerRef.current && videoState.frame === 2) {
+      console.log("Pausing the video");
+      playerRef.current.getInternalPlayer().pause(); // Pause the video
+    }
+  }, [videoState]);
 
   return (
-    <div>
-      <ThemeProvider theme={theme}>
-        <Container maxWidth="md" sx={{ marginTop: '20px', overflow: 'hidden' }}>
-          <Grid container spacing={2} justifyContent="center" alignItems="center">
-            <Grid item xs={12} md={8}>
-              <ReactPlayer
-                ref={playerRef}
-                url={videoInfo.videoUrl}
-                playing={playing}
-                controls
-                playbackRate={playbackRate}
-                width="100%"
-                height="400px"
-                onProgress={handleSeek}
-                config={{
-                  file: {
-                    forceVideo: true,
-                    attributes: {
-                      controlsList: 'nodownload',
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  Controls
-                </Typography>
-                <Slider
-                  value={numOfFramesToSkip}
-                  onChange={handleNumberOfFrames}
-                  min={1}
-                  max={10}
-                  step={1}
-                  marks
-                  sx={{ width: '100%' }}
-                />
-                <Typography gutterBottom>Number of Frames to Skip</Typography>
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Button variant="contained" onClick={handlePrevFrame}>
-                    Previous Frame
-                  </Button>
-                  <Button variant="contained" onClick={handleNextFrame}>
-                    Next Frame
-                  </Button>
-                </Box>
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                  {[0.5, 0.75, 1, 1.25, 1.5, 2, 2.5].map((speed) => (
-                    <Button key={speed} variant="outlined" onClick={() => handleSpeedChange(speed)}>
-                      {speed}x
-                    </Button>
-                  ))}
-                </Box>
-                <Typography>Current Frame: {currentFrame}</Typography>
-                <canvas ref={canvasRef} sx={{ width: '100%', height: 30, mt: 2 }}></canvas>
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
+    <VideoPlayerContext.Provider value={{ getCurrentTime }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '450px', position:'relative' }}>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <div ref={playerContainerRef} style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
+          <ReactPlayer
+            ref={playerRef}
+            url={videoInfo.videoUrl}
+            playing={playing}
+            controls
+            playbackRate={playbackRate}
+            width="100%"
+            height="400px"
+            onProgress={handleProgress}
+            config={{
+              file: {
+                forceVideo: true,
+                attributes: {
+                  controlsList: 'nodownload',
+                },
+              },
+            }}
+          />
+        </div>
+          <Typography variant="h6" gutterBottom>
+            Controls
+          </Typography>
+          <Slider
+            value={numOfFramesToSkip}
+            onChange={handleNumberOfFrames}
+            min={1}
+            max={10}
+            step={1}
+            marks
+            sx={{ width: '50%' }}
+          />
+          <Typography gutterBottom>Number of Frames to Skip</Typography>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button variant="contained" onClick={handlePrevFrame}>
+              Previous Frame
+            </Button>
+            <Button variant="contained" onClick={handleNextFrame}>
+              Next Frame
+            </Button>
+          </Box>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            {[0.25, 0.5, 0.75, 1].map((speed) => (
+              <Button key={speed} variant="outlined" onClick={() => handleSpeedChange(speed)}>
+                {speed}x
+              </Button>
+            ))}
+          </Box>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            {[1.25, 1.5, 1.75, 2].map((speed) => (
+              <Button key={speed} variant="outlined" onClick={() => handleSpeedChange(speed)}>
+                {speed}x
+              </Button>
+            ))}
+          </Box>
+          <Typography>Current Frame: {currentFrame}</Typography>
+          <canvas ref={canvasRef} sx={{ width: '100%', height: '30px', mt: '20px' }}></canvas>
+        </Box>
       </ThemeProvider>
     </div>
+    </VideoPlayerContext.Provider>
+  );
+};
+
+const VideoPlayerProvider = ({ children }) => {
+  const playerRef = useRef(null);
+
+  return (
+    <VideoPlayerContext.Provider value={{ playerRef }}>
+      {children}
+    </VideoPlayerContext.Provider>
   );
 };
 
@@ -181,12 +268,17 @@ const mapStateToProps = (state) => ({
   numOfFramesToSkip: state.numOfFramesToSkip,
   currentFrame: state.currentFrame,
   stepFrames: state.stepFrames,
+  videoState: state.videoState,
+  videoFilename: state.videoFilename,
 });
 
 const mapDispatchToProps = {
   setNumOfFramesToSkip,
   setCurrentFrame,
   setStepFrames,
+  setVideoState,
+  setVideoInfo,
+  setVideoFilename,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayer);
