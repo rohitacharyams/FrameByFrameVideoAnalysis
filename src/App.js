@@ -8,6 +8,8 @@ import LoginForm from './Components/LoginForm';
 import RegisterForm from './Components/RegisterForm';
 import AuthService from './Components/AuthService';
 import { PlayerContext } from './Components/PlayerContext';
+import Navbar from './Components/Navbar';
+import './/App.css';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,15 +20,16 @@ const App = () => {
 
   return (
     <Router>
+      <Navbar className='navbar'/>
+      
       <PlayerContext.Provider value={{ playerRef }}>
-        
         <Routes>
           <Route path="/" element={
-            <div style={{ display: 'flex', flexDirection: 'row', height: '10vh' }}>
-              <div style={{ flex: 4, minHeight: '100vh', position: 'relative' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
+              <div style={{ flex: 4, position: 'relative' }}>
                 <VideoPlayer/>
               </div>
-              <div style={{ flex: 2, overflowY: 'auto', height: '100vh' }}>
+              <div style={{ flex: 2, overflowY: 'auto' }}>
                 <Keyframes />
               </div>
             </div>
@@ -34,6 +37,7 @@ const App = () => {
           <Route path="/review" element={<ReviewPage />} />
         </Routes>
       </PlayerContext.Provider>
+      
     </Router>
   );
 };

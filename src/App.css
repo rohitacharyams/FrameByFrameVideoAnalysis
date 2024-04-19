@@ -1,34 +1,20 @@
-/* src/App.css */
-.App {
-    position: relative;
-    height: 100vh;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5); /* Fallback for browsers that do not support video */
-  }
-  
-  .video-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
-  
-  .overlay-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 1;
-  }
-/* Add to src/App.css */
-.video-background::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    cursor: default;
-  }
-    
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+}
+
+  /* Add this in your main CSS file */
+.content-area {
+  height: calc(100vh - 64px); /* Assuming navbar is 64px tall */
+  overflow: hidden; /* Prevents unwanted scrollbars */
+}
+
+.navbar {
+  width: 100%;
+  height: 64px; /* Adjust this based on your actual navbar height */
+  position: fixed; /* Ensures navbar is positioned relative to the viewport */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Keeps navbar above other content */
+}

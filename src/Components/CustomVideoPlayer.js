@@ -62,27 +62,19 @@ const CustomVideoPlayer = ({
     };
 
     return (
-        <div className="player-wrapper" >
-        <ReactPlayer
-            ref={playerRef}
-            url={videoInfo.videoUrl}
-            playing={playing}
-            controls={false}
-            width="100%"
-            height="100%"
-            onProgress={({ playedSeconds }) => console.log('Current Time:', playedSeconds)}
-            className="react-player"
-        />
-            
+        <div className="player-wrapper">
+            <ReactPlayer
+                ref={playerRef}
+                url={videoInfo.videoUrl}
+                playing={playing}
+                controls={true}
+                width="100%"
+                height="100%"
+            />
             <div className="controls">
-                <button onClick={togglePlay}>{playing ? '⏸' : '▶️'}</button>
-                <button >🔁</button>
-                <button >🔄</button>
-                <button >🖥️</button>
-                <button >🔧</button>
+                <button onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
+                {/* Additional control buttons */}
             </div>
-            
-            
         </div>
     );
 };
