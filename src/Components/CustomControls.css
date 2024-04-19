@@ -18,6 +18,7 @@ body, html {
 .player-wrapper {
     flex-grow: 1; /* Takes up as much space as available */
     position: relative; /* Positioned relative to its normal position */
+    height: inherit;
     width: 100%; /* Full width */
     background-color: black; /* Sets background to black */
 }
@@ -26,8 +27,11 @@ body, html {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height of the container */
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensures video is scaled properly within the player */
 }
 
 .controls {
@@ -58,14 +62,4 @@ button {
 
 button:hover {
     background-color: rgba(255, 255, 255, 0.7);
-}
-
-* {
-    box-sizing: border-box; /* Ensures padding and border are included in width/height */
-}
-
-/* Ensure no global margins or paddings are affecting the layout */
-*, *::before, *::after {
-    margin: 0;
-    padding: 0;
 }

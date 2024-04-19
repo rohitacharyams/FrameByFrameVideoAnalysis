@@ -37,7 +37,7 @@ const App = () => {
           <Route path="/review" element={<ReviewPage />} />
         </Routes>
       </PlayerContext.Provider>
-      
+      <FileInput />
     </Router>
   );
 };
