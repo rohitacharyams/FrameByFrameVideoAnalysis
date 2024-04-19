@@ -6,6 +6,7 @@ import LoginForm from './Components/LoginForm';
 import RegisterForm from './Components/RegisterForm';
 import AuthService from './Components/AuthService';
 import { PlayerContext } from './Components/PlayerContext';
+import Navbar from './Components/Navbar';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,6 +26,7 @@ const App = () => {
 
   return (
     <div>
+    <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
     <PlayerContext.Provider value={{ playerRef }}>
       <FileInput />
       <div style={{ display: 'flex', flexDirection: 'row', height: '10vh' }}>
