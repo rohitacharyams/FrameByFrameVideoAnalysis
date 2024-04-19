@@ -208,19 +208,6 @@ const VideoPlayer = ({
             }}
           />
         </div>
-          <Typography variant="h6" gutterBottom>
-            Controls
-          </Typography>
-          <Slider
-            value={numOfFramesToSkip}
-            onChange={handleNumberOfFrames}
-            min={1}
-            max={10}
-            step={1}
-            marks
-            sx={{ width: '50%' }}
-          />
-          <Typography gutterBottom>Number of Frames to Skip</Typography>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Button variant="contained" onClick={handlePrevFrame}>
               Previous Frame
@@ -229,20 +216,8 @@ const VideoPlayer = ({
               Next Frame
             </Button>
           </Box>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            {[0.25, 0.5, 0.75, 1].map((speed) => (
-              <Button key={speed} variant="outlined" onClick={() => handleSpeedChange(speed)}>
-                {speed}x
-              </Button>
-            ))}
-          </Box>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            {[1.25, 1.5, 1.75, 2].map((speed) => (
-              <Button key={speed} variant="outlined" onClick={() => handleSpeedChange(speed)}>
-                {speed}x
-              </Button>
-            ))}
-          </Box>
+          
+          
           <Typography>Current Frame: {currentFrame}</Typography>
           <canvas ref={canvasRef} sx={{ width: '100%', height: '30px', mt: '20px' }}></canvas>
         </Box>

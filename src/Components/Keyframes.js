@@ -6,6 +6,7 @@ import DanceStepsManager from './DanceStepsManager';
 import './keyFrames.css';
 import { useVideoPlayer } from './VideoPlayerContext';
 import { usePlayer } from './PlayerContext';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -40,6 +41,8 @@ const Keyframes = ({
 
   const [danceSteps, setDanceSteps] = useState([]);
 
+  const navigate = useNavigate();
+  
   const { playerRef } = usePlayer();
   const [currentFrameNumber, setCurrentFrameNumber] = useState(0);
 
@@ -126,6 +129,7 @@ const Keyframes = ({
       .then((response) => response.json())
       .then((data) => {
         console.log('Keyframes saved successfully:', data);
+        navigate('/review');
       })
       .catch((error) => console.error('Error saving keyframes:', error));
   };

@@ -1,0 +1,92 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.player-container {
+    display: flex;
+    height: 80vh; /* Adjust based on your layout needs */
+    align-items: stretch; /* Ensures children fill the container vertically */
+}
+
+.player-wrapper {
+    flex-grow: 1; /* Takes up as much space as possible */
+    overflow: hidden; /* Prevents scroll bars if content slightly overflows */
+    height: 5vh;
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    background-color: black;
+}
+
+.react-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.controls {
+    position: absolute;
+    bottom: 50px; /* Adjust this value based on the player's controls height */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5); /* White with 50% opacity */
+    border: none;
+    color: white;
+    margin: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    opacity: 0.75;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow for better visibility */
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.7); /* Slightly more visible on hover */
+}
+
+.player-wrapper:hover .controls {
+    visibility: visible; /* Show controls when hovering over the player */
+}
+
+.player-controls button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5); /* more transparent */
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 5px; /* spacing */
+}
+
+.player-controls button:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* slightly less transparent on hover */
+}
+
+.react-player {
+     /* Rounded corners */
+    overflow: hidden; /* Ensures no overflow content is visible outside the rounded corners */
+}
+
+
+

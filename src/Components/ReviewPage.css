@@ -1,0 +1,27 @@
+/* ReviewPage.css */
+body, html, #root {
+    height: 100%;
+    margin: 0;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.navbar {
+    height: 10px; /* Set based on your actual navbar height */
+}
+
+.player-container {
+    flex-grow: 1;
+    
+}
+
+.player-wrapper {
+    height: 100%; /* Takes full height of its container */
+    width: 100%; /* Full width */
+    position: relative;
+    background-color: black; /* Ensure video background is black */
+}
