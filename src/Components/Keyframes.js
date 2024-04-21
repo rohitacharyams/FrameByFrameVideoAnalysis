@@ -101,6 +101,7 @@ const Keyframes = ({
     const newStep = {
       keyFrameIn: KeyFrameTypeNumber.keyFrameInFrameNmber,
       keyFrameOut: frameNumber,
+      newStepId: danceSteps.length,
     };
     setDanceSteps([...danceSteps, newStep]);
 
