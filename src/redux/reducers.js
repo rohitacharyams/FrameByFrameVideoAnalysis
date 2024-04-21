@@ -11,6 +11,7 @@ import {
     SET_STEP_FRAMES,
     SET_VIDEO_STATE,
     UPDATE_DISPLAYED_STEP,
+    SET_DANCE_STEPS,
   } from './actions';
   
   const initialState = {
@@ -30,10 +31,14 @@ import {
     stepFrames: {startFrame: 1, endFrame: 1},
     videoState: {currentState: true, frame: 3},
     updateDisplayedStep: {frameNumber: 1},
+    danceSteps: [],
   };
   
   const rootReducer = (state = initialState, action) => {
     switch (action.type) {
+      case SET_DANCE_STEPS:
+        console.log("The dance step array is:", action.payload);
+        return {...state, danceSteps: action.payload};
       case SET_STEP_FRAMES:
         return {...state, stepFrames: action.payload};
       case SET_VIDEO_STATE:

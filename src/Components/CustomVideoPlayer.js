@@ -1,12 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import { connect } from 'react-redux';
-import { setVideoInfo, setNumOfFramesToSkip, setCurrentFrame, setStepFrames, setVideoState, setVideoFilename } from '../redux/actions';
-import { Slider, Button, Typography, Grid, Box, Container, ThemeProvider, createTheme } from '@mui/material';
-import { VideoPlayerContext } from './VideoPlayerContext';
-import { usePlayer } from './PlayerContext';
-import axios from 'axios';
+import { setVideoInfo, setNumOfFramesToSkip, setCurrentFrame, setStepFrames, setVideoState, setVideoFilename, setDanceSteps } from '../redux/actions';
+
 import './/CustomControls.css';
+import DanceStepsManager from './DanceStepsManager';
 
 const CustomVideoPlayer = ({ 
   stepFrames,
@@ -21,45 +19,45 @@ const CustomVideoPlayer = ({
   videoState,
   setVideoInfo,
   setVideoFilename,
-  videoFilename, }) => {
+  videoFilename,
+  setDanceSteps,
+  danceSteps,
+   }) => {
     const playerRef = useRef(null);
     const [playing, setPlaying] = useState(false);
 
     console.log("videoInfo:", videoInfo);
-    const [isFullscreen, setIsFullscreen] = useState(false);
+    console.log("DanceSteps are :", danceSteps);
+    const [showSteps, setShowSteps] = useState(false);
 
-    // useEffect(() => {
-    //     if (stepFrames) {
-    //         playStepFrames(stepFrames);
-    //     }
-    // }, [stepFrames]);
-
-    // const playStepFrames = ({ startFrame, endFrame }) => {
-    //     const startSeconds = startFrame / 30;  // assuming 30 FPS for calculations
-    //     const endSeconds = endFrame / 30;
-
-    //     playerRef.current.seekTo(startSeconds, 'seconds');
-    //     setPlaying(true);
-
-    //     const interval = setInterval(() => {
-    //         if (playerRef.current.getCurrentTime() >= endSeconds) {
-    //             setPlaying(false);
-    //             clearInterval(interval);
-    //         }
-    //     }, 100);
-
-    //     return () => clearInterval(interval);
-    // };
+    const toggleSteps = () => {
+        setShowSteps(!showSteps); // Toggle visibility of steps
+    };
 
     const togglePlay = () => {
         setPlaying(!playing);
     };
 
-    const handleFullscreen = () => {
-        setIsFullscreen(!isFullscreen);
-        // This function should toggle full screen in a way that keeps the steps pane accessible.
-        // This could involve custom fullscreen handling rather than using default browser fullscreen.
-    };
+
+    const [currentStep, setCurrentStep] = useState(null);
+
+    const playStep = (step) => {
+        setCurrentStep(step);
+        const startSeconds = step.keyFrameIn / frameRate;  // assuming frameRate is available globally or passed as prop
+        const endSeconds = step.keyFrameOut / frameRate;
+        
+        playerRef.current.seekTo(startSeconds, 'seconds');
+        setPlaying(true);
+
+        console.log("Start and end seconds are", startSeconds, endSeconds);
+    
+        const checkInterval = setInterval(() => {
+          if (playerRef.current.getCurrentTime() >= endSeconds) {
+            setPlaying(false);
+            clearInterval(checkInterval);
+          }
+        }, 100);
+      };
 
     return (
         <div className="player-wrapper">
@@ -73,17 +71,31 @@ const CustomVideoPlayer = ({
             />
             <div className="controls">
                 <button onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
+                
                 {/* Additional control buttons */}
+            </div>
+            <div className="right-controls">
+            <button className="steps-button" onClick={toggleSteps}>STEPS</button>
+            <div className="steps-container">
+                {danceSteps.map((step, index) => (
+                    <button key={index} className="button-step" onClick={() => playStep(step)}>
+                    Step {index + 1}
+                    </button>
+                ))}
+        </div>
             </div>
         </div>
     );
 };
 const mapStateToProps = (state) => ({
-    videoInfo: state.videoInfo
+    videoInfo: state.videoInfo,
+    danceSteps: state.danceSteps,
+    frameRate: state.frameRate,
 });
 
 const mapDispatchToProps = {
     setVideoInfo,
+    setDanceSteps,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomVideoPlayer);

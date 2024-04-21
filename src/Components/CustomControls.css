@@ -36,13 +36,18 @@ body, html {
 
 .controls {
     position: absolute;
-    bottom: 35px; /* Position controls at the bottom */
-    left: 50%; /* Center the controls */
-    transform: translateX(-50%); /* Align center */
-    z-index: 2; /* Ensures controls are above the player */
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     justify-content: center;
+    visibility: hidden; /* Hide controls by default */
+    transition: visibility 0.3s ease; /* Smooth transition for visibility */
+}
+
+.player-wrapper:hover .controls {
+    visibility: visible; /* Make controls visible when hovering over the player */
 }
 
 button {
@@ -62,4 +67,98 @@ button {
 
 button:hover {
     background-color: rgba(255, 255, 255, 0.7);
+}
+
+.right-controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    z-index: 10;
+    padding-top: 0%;
+    padding-right: 10px;
+}
+
+.right-controls button:hover {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.player-wrapper:hover .right-controls {
+    visibility: visible; /* Show controls when hovering over the player */
+}
+
+.hamburger-menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 24px;
+}
+
+.hamburger-menu div {
+    height: 3px;
+    background: white;
+    border-radius: 1px;
+}
+
+.steps-container {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    width: 50px; /* Increased width */
+    max-height: 60vh; /* Maximum height before scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 100;
+}
+
+.right-controls:hover .steps-container,
+.right-controls {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+}
+
+.button-step {
+    width: 100%; /* Full width of the steps container */
+    margin: 5px 0;
+    height: 10vh;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent buttons */
+    border: none;
+    color: black;
+    padding: 8px 10px; /* Padding adjusted */
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left; /* Align text to the left */
+    opacity: 0.7;
+}
+
+.button-step:hover {
+    width: auto;
+    background-color: rgba(255, 255, 255, 1); /* Less transparency on hover */
+}
+
+.steps-button {
+    width: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Match video player's theme */
+    color: white;
+    border: none;
+    padding: 8px 16px; /* Sufficient padding */
+    font-size: 16px; /* Readable font size */
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    white-space: nowrap; /* Prevents text wrapping */
 }
