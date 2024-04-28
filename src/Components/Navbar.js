@@ -12,7 +12,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LoginSignupPopup from './LoginSignupPopup';
-
+import AdbIcon from '@mui/icons-material/Adb';
+import './/Navbar.css';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Dashboard', 'Logout'];
@@ -32,7 +33,7 @@ function Navbar({ isLoggedIn, handleLogout}) {
 
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" className='navbar'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography

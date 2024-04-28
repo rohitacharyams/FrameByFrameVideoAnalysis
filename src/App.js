@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FileInput from './Components/FileInput';
 import VideoPlayer from './Components/VideoPlayer';
 import Keyframes from './Components/Keyframes';
+import ReviewPage from './Components/ReviewPage';  // Assuming you create this component
 import LoginForm from './Components/LoginForm';
 import RegisterForm from './Components/RegisterForm';
 import AuthService from './Components/AuthService';
@@ -10,6 +12,7 @@ import Navbar from './Components/Navbar';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
 import { firebaseConfig } from './firebaseConfig';
+import './/App.css';
 
 const firebaseApp = initializeApp(firebaseConfig);
 
@@ -18,32 +21,29 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 
-  // Assume playerRef is declared and initialized here if you plan to provide it from App.js
   const playerRef = useRef(null);
 
-  const handleLogin = async (credentials) => {
-    // Your login logic
-  };
-
-  const handleLogout = () => {
-    // Your logout logic
-  };
-
   return (
-    <div>
-    <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-    <PlayerContext.Provider value={{ playerRef }}>
+    <Router>
+      <Navbar className='navbar'/>
+      
+      <PlayerContext.Provider value={{ playerRef }}>
+        <Routes>
+          <Route path="/" element={
+            <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
+              <div style={{ flex: 4, position: 'relative' }}>
+                <VideoPlayer/>
+              </div>
+              <div style={{ flex: 2, overflowY: 'auto' }}>
+                <Keyframes />
+              </div>
+            </div>
+          } />
+          <Route path="/review" element={<ReviewPage />} />
+        </Routes>
+      </PlayerContext.Provider>
       <FileInput />
-      <div style={{ display: 'flex', flexDirection: 'row', height: '10vh' }}>
-        <div style={{ flex: 4, minHeight: '100vh', position: 'relative' }}>
-          <VideoPlayer/>
-        </div>
-        <div style={{ flex: 2, overflowY: 'auto', height: '100vh' }}>
-          <Keyframes />
-        </div>
-      </div>
-    </PlayerContext.Provider>
-    </div>
+    </Router>
   );
 };
 

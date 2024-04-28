@@ -10,6 +10,12 @@ export const SET_THUMBNAIL_URL = 'SET_THUMBNAIL_URL';
 export const SET_STEP_FRAMES = 'SET_STEP_FRAMES';
 export const SET_VIDEO_STATE = 'SET_VIDEO_STATE';
 export const UPDATE_DISPLAYED_STEP = 'UPDATE_DISPLAYED_STEP';
+export const SET_DANCE_STEPS = 'DANCE-STEPS';
+
+export const setDanceSteps = (frame) => ({
+  type: SET_DANCE_STEPS,
+  payload: frame,
+});
 
 export const setStepFrames = (startFrame, endFrame) => ({
   type: SET_STEP_FRAMES,

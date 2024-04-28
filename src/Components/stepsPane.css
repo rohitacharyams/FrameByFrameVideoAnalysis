@@ -1,0 +1,11 @@
+.steps-pane {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20%; /* Adjust based on your preference */
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white;
+    padding: 20px;
+    transition: right 0.5s ease;
+}

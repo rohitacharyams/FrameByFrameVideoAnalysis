@@ -1,11 +1,12 @@
 // components/Keyframes.js
 import React, { useState, useContext, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { setKeyframes, setKeyframeBool, setStepFrames, setVideoState, UPDATE_DISPLAYED_STEP } from '../redux/actions';
+import { setKeyframes, setKeyframeBool, setStepFrames, setVideoState, UPDATE_DISPLAYED_STEP, setDanceSteps } from '../redux/actions';
 import DanceStepsManager from './DanceStepsManager';
 import './keyFrames.css';
 import { useVideoPlayer } from './VideoPlayerContext';
 import { usePlayer } from './PlayerContext';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -30,6 +31,8 @@ const Keyframes = ({
   stepFrames,
   setVideoState,
   videoState,
+  setDanceSteps,
+  danceSteps,
 }) => {
   const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useState({
     keyFrameInFrameNmber: currentFrame,
@@ -38,8 +41,10 @@ const Keyframes = ({
 
   const [playing, setPlaying] = useState(false); // Define the playing state
 
-  const [danceSteps, setDanceSteps] = useState([]);
+  
 
+  const navigate = useNavigate();
+  
   const { playerRef } = usePlayer();
   const [currentFrameNumber, setCurrentFrameNumber] = useState(0);
 
@@ -104,6 +109,7 @@ const Keyframes = ({
     setVideoState(false, 2, (dispatch) => {
       dispatch({type: UPDATE_DISPLAYED_STEP, payload: frameNumber});
     });
+    console.log("The value of danceSteps array are :", danceSteps);
 
   };
 
@@ -112,6 +118,7 @@ const Keyframes = ({
     console.log('Passing props');
     setStepFrames(step.keyFrameIn, step.keyFrameOut);
     console.log('stepFrames after dispatch:', stepFrames);
+    
   };
 
   const handleLabellingDone = () => {
@@ -126,6 +133,7 @@ const Keyframes = ({
       .then((response) => response.json())
       .then((data) => {
         console.log('Keyframes saved successfully:', data);
+        navigate('/review');
       })
       .catch((error) => console.error('Error saving keyframes:', error));
   };
@@ -197,6 +205,7 @@ const mapStateToProps = (state) => ({
   stepFrames: state.stepFrames,
   videoState: state.videoState,
   frameRate: state.frameRate,
+  danceSteps: state.danceSteps,
 });
 
 const mapDispatchToProps = {
@@ -204,6 +213,7 @@ const mapDispatchToProps = {
   setKeyframeBool,
   setStepFrames,
   setVideoState,
+  setDanceSteps,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Keyframes);
