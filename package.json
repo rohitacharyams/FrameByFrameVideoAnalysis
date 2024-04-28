@@ -13,6 +13,7 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.2",
+    "firebase": "^10.11.1",
     "navbar": "^2.1.0",
     "opencv.js": "^1.2.1",
     "plyr": "^3.7.8",
