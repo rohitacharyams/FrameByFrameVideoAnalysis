@@ -11,7 +11,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import LoginSignupPopup from './LoginSignupPopup';
+
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Dashboard', 'Logout'];
@@ -99,20 +100,24 @@ function Navbar({ isLoggedIn, handleLogout}) {
               </Button>
             ))}
           </Box>
-         {isLoggedIn ? <ProfileIcon/> : <LoginSignup/>}
+         {isLoggedIn ? <ProfileIcon/> : <LoginSignupButton/>}
          </Toolbar>
       </Container>
     </AppBar>
   );
 }
 
-function LoginSignup() {
+function LoginSignupButton() {
+    const [open, setOpen] = React.useState(false);
+
     return (
         <Box sx={{ flexGrow: 0}}>
-            <Button variant="contained" color="primary" >Login/Signup</Button>
+            <Button variant="contained" color="primary" onClick={()=>setOpen(true)}>Login/Signup</Button>
+            {open ? <LoginSignupPopup open={open} setOpen={setOpen}/> : null}
         </Box>
     )
 }
+
 
 function ProfileIcon() {
     const [anchorElUser, setAnchorElUser] = React.useState(null);

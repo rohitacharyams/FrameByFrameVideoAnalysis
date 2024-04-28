@@ -7,6 +7,11 @@ import RegisterForm from './Components/RegisterForm';
 import AuthService from './Components/AuthService';
 import { PlayerContext } from './Components/PlayerContext';
 import Navbar from './Components/Navbar';
+import { initializeApp } from 'firebase/app';
+import 'firebase/auth';
+import { firebaseConfig } from './firebaseConfig';
+
+const firebaseApp = initializeApp(firebaseConfig);
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
