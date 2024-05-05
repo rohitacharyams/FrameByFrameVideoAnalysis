@@ -1,0 +1,4 @@
+get keypoints data for individual person/dancers from the video
+extracted keypoints to be compared if they are performing the similar moves
+store the keypoints data as labelled data in DB
+Make sure to track individual dancer in the video considering that the bounding box might give incorrect results post dancers change their position or cross paths
