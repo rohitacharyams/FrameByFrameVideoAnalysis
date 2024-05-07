@@ -4,9 +4,6 @@ import FileInput from './Components/FileInput';
 import VideoPlayer from './Components/VideoPlayer';
 import Keyframes from './Components/Keyframes';
 import ReviewPage from './Components/ReviewPage';  // Assuming you create this component
-import LoginForm from './Components/LoginForm';
-import RegisterForm from './Components/RegisterForm';
-import AuthService from './Components/AuthService';
 import { PlayerContext } from './Components/PlayerContext';
 import Navbar from './Components/Navbar';
 import { initializeApp } from 'firebase/app';
@@ -17,16 +14,11 @@ import './/App.css';
 const firebaseApp = initializeApp(firebaseConfig);
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState('');
-
   const playerRef = useRef(null);
 
   return (
     <Router>
       <Navbar className='navbar'/>
-      
       <PlayerContext.Provider value={{ playerRef }}>
         <Routes>
           <Route path="/" element={
