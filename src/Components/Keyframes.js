@@ -1,12 +1,12 @@
 // components/Keyframes.js
 import React, { useState, useContext, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { setKeyframes, setKeyframeBool, setStepFrames, setVideoState, UPDATE_DISPLAYED_STEP, setDanceSteps } from '../redux/actions';
 import DanceStepsManager from './DanceStepsManager';
 import './keyFrames.css';
 import { useVideoPlayer } from './VideoPlayerContext';
 import { usePlayer } from './PlayerContext';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { currentFrameAtom, keyframesAtom, videoFilenameAtom, keyframeBoolAtom, frameRateAtom, stepFramesAtom, videoStateAtom, danceStepsAtom } from '../Recoil/atoms';
 
 import {
   Button,
@@ -18,22 +18,18 @@ import {
 
 
 
-const Keyframes = ({
-  currentFrame,
-  keyframes,
-  videoFilename,
-  keyframeBool,
-  setKeyframes,
-  setKeyframeBool,
-  setStepFrames,
-  frameRate,
-  increaseFrameCount,
-  stepFrames,
-  setVideoState,
-  videoState,
-  setDanceSteps,
-  danceSteps,
-}) => {
+const Keyframes = () => {
+  // Recoil states :
+  const [currentFrame, setCurrentFrame] = useRecoilState(currentFrameAtom);
+  const [keyframes, setKeyframes] = useRecoilState(keyframesAtom);
+  const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
+  const [keyframeBool, setKeyframeBool] = useRecoilState(keyframeBoolAtom);
+  const [frameRate, setFrameRate] = useRecoilState(frameRateAtom);
+  const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
+  const [videoState, setVideoState] = useRecoilState(videoStateAtom);
+  const [danceSteps, setDanceSteps] = useRecoilState(danceStepsAtom);
+
+
   const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useState({
     keyFrameInFrameNmber: currentFrame,
     keyFrameOutFrameNmber: currentFrame,
@@ -106,9 +102,7 @@ const Keyframes = ({
 
     // I need something to first pause the video for a sec and then 
     console.log("Setting video state to pause, current frame", frameNumber);
-    setVideoState(false, 2, (dispatch) => {
-      dispatch({type: UPDATE_DISPLAYED_STEP, payload: frameNumber});
-    });
+    setVideoState(false, 2);
     console.log("The value of danceSteps array are :", danceSteps);
 
   };
@@ -197,23 +191,4 @@ const Keyframes = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  currentFrame: state.currentFrame,
-  keyframes: state.keyframes,
-  keyframeBool: state.keyframeBool,
-  videoFilename: state.videoFilename,
-  stepFrames: state.stepFrames,
-  videoState: state.videoState,
-  frameRate: state.frameRate,
-  danceSteps: state.danceSteps,
-});
-
-const mapDispatchToProps = {
-  setKeyframes,
-  setKeyframeBool,
-  setStepFrames,
-  setVideoState,
-  setDanceSteps,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Keyframes);
+export default Keyframes;

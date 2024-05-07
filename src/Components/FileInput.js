@@ -1,8 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { setVideoInfo, setFrameRate, setVideoFilename, setThumbnailUrl } from '../redux/actions';
+import { useRecoilState } from 'recoil';
+import { videoInfoAtom, frameRateAtom, videoFilenameAtom, thumbnailUrlAtom } from '../Recoil/atoms';
 
-const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
+const FileInput = () => {
+  // Recoil states :
+  const [videoInfo, setVideoInfo] = useRecoilState(videoInfoAtom);
+  const [frameRate, setFrameRate] = useRecoilState(frameRateAtom);
+  const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
+  const [thumbnailUrl, setThumbnailUrl] = useRecoilState(thumbnailUrlAtom);
+
+
   const handleFileChange = (event) => {
     console.log("Clickeddddd")
     const file = event.target.files[0];
@@ -56,18 +63,4 @@ const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-    frameRate: state.frameRate,
-    videoInfo: state.setVideoInfo,
-    videoFilename: state.videoFilename,
-    thumbnailUrl: state.thumbnailUrl,
-});
-
-const mapDispatchToProps = {
-  setVideoInfo,
-  setFrameRate,
-  setVideoFilename,
-  setThumbnailUrl,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FileInput);
+export default FileInput;

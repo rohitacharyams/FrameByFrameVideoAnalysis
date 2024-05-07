@@ -1,13 +1,13 @@
 // components/VideoPlayer.js
 
 import React, { useState, useRef, useEffect, createContext } from 'react';
-import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
-import { setVideoInfo, setNumOfFramesToSkip, setCurrentFrame, setStepFrames, setVideoState, setVideoFilename } from '../redux/actions';
 import { Slider, Button, Typography, Grid, Box, Container, ThemeProvider, createTheme } from '@mui/material';
 import { VideoPlayerContext } from './VideoPlayerContext';
 import { usePlayer } from './PlayerContext';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { videoInfoAtom, frameRateAtom, currentFrameAtom, numOfFramesToSkipAtom, stepFramesAtom, videoStateAtom, videoFilenameAtom } from '../Recoil/atoms';
 
 
 const theme = createTheme({
@@ -21,21 +21,17 @@ const theme = createTheme({
   },
 });
 
-const VideoPlayer = ({
-  videoInfo,
-  frameRate,
-  currentFrame,
-  numOfFramesToSkip,
-  setCurrentFrame,
-  setNumOfFramesToSkip,
-  setStepFrames,
-  stepFrames,
-  setVideoState,
-  videoState,
-  setVideoInfo,
-  setVideoFilename,
-  videoFilename,
-}) => {
+const VideoPlayer = () => {
+  //Recoil states :
+  const [videoInfo, setVideoInfo] = useRecoilState(videoInfoAtom);
+  const [frameRate, setFrameRate] = useRecoilState(frameRateAtom);
+  const [currentFrame, setCurrentFrame] = useRecoilState(currentFrameAtom);
+  const [numOfFramesToSkip, setNumOfFramesToSkip] = useRecoilState(numOfFramesToSkipAtom);
+  const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
+  const [videoState, setVideoState] = useRecoilState(videoStateAtom);
+  const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
+
+
   // const playerRef = useRef(null);
   const { playerRef } = usePlayer();
   const playerContainerRef = useRef(null);
@@ -237,23 +233,4 @@ const VideoPlayerProvider = ({ children }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  videoInfo: state.videoInfo,
-  frameRate: state.frameRate,
-  numOfFramesToSkip: state.numOfFramesToSkip,
-  currentFrame: state.currentFrame,
-  stepFrames: state.stepFrames,
-  videoState: state.videoState,
-  videoFilename: state.videoFilename,
-});
-
-const mapDispatchToProps = {
-  setNumOfFramesToSkip,
-  setCurrentFrame,
-  setStepFrames,
-  setVideoState,
-  setVideoInfo,
-  setVideoFilename,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayer);
+export default VideoPlayer;
