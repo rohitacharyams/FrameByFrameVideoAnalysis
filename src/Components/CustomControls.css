@@ -50,6 +50,7 @@ body, html {
     visibility: visible; /* Make controls visible when hovering over the player */
 }
 
+
 button {
     width: 40px;
     height: 40px;

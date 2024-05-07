@@ -183,6 +183,8 @@ const VideoPlayer = ({
     }
   }, [videoState]);
 
+  const url = "https://www.youtube.com/watch?v=24sm4XYi4MY";
+
   return (
     <VideoPlayerContext.Provider value={{ getCurrentTime }}>
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '450px', position:'relative' }}>

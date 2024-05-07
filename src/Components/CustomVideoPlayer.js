@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import { connect } from 'react-redux';
-import { setVideoInfo, setNumOfFramesToSkip, setCurrentFrame, setStepFrames, setVideoState, setVideoFilename, setDanceSteps } from '../redux/actions';
+import { setVideoInfo, setNumOfFramesToSkip, setCurrentFrame, setStepFrames, setVideoState, setVideoFilename, setDanceSteps, setVideoRatio } from '../redux/actions';
 import { Button } from '@mui/material';
 
 import './/CustomControls.css';
@@ -21,8 +21,10 @@ const CustomVideoPlayer = ({
   setVideoInfo,
   setVideoFilename,
   videoFilename,
-  setDanceSteps,
   danceSteps,
+  setDanceSteps,
+  setVideoRatio,
+  videoRatio
    }) => {
     const playerRef = useRef(null);
     const [playing, setPlaying] = useState(false);
@@ -33,6 +35,7 @@ const CustomVideoPlayer = ({
     console.log("DanceSteps are :", danceSteps);
     const [showSteps, setShowSteps] = useState(false);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const [mirrored, setMirrored] = useState(false);
 
     const toggleSteps = () => {
         setShowSteps(!showSteps); // Toggle visibility of steps
@@ -41,6 +44,19 @@ const CustomVideoPlayer = ({
     const togglePlay = () => {
         setPlaying(!playing);
     };
+
+    const toggleMirroring = () => {
+        setMirrored(!mirrored);  // Toggle mirroring state
+    };
+
+    useEffect(() => {
+        if (playerRef.current && playerRef.current.getInternalPlayer()) {
+            const videoElement = playerRef.current.getInternalPlayer();
+            videoElement.style.transform = mirrored ? 'scaleX(-1)' : 'scaleX(1)';
+        }
+    }, [mirrored]);
+
+    
 
 
     const playStep = (step) => {
@@ -143,6 +159,7 @@ const CustomVideoPlayer = ({
         }
         
     };
+    
 
     return (
         <div className="player-wrapper">
@@ -157,12 +174,14 @@ const CustomVideoPlayer = ({
                     if (!loop) setPlaying(false);
                 }}
                 key={currentStep ? currentStep.KeyframeIn : 'default-key'}
+                
             />
             <div className="controls">
                 <button onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
                 <button onClick={() => handlePreviousStep()}>Prev</button>
                 <button onClick={() => handleNextStep()}>Next</button>
                 <button onClick={toggleLoop}>{loop ? 'Stop Loop' : 'Loop'}</button>
+                <button onClick={toggleMirroring}>{mirrored ? 'Unmirror' : 'Mirror'}</button>
                 {/* Additional control buttons */}
             </div>
             <div className="right-controls">

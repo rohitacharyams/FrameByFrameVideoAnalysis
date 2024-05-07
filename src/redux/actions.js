@@ -11,10 +11,16 @@ export const SET_STEP_FRAMES = 'SET_STEP_FRAMES';
 export const SET_VIDEO_STATE = 'SET_VIDEO_STATE';
 export const UPDATE_DISPLAYED_STEP = 'UPDATE_DISPLAYED_STEP';
 export const SET_DANCE_STEPS = 'DANCE-STEPS';
+export const SET_VIDEO_RATIO = 'VIDEO_RATIO';
 
 export const setDanceSteps = (frame) => ({
   type: SET_DANCE_STEPS,
   payload: frame,
+});
+
+export const setVideoRatio = (ratio) => ({
+  type: SET_VIDEO_RATIO,
+  payload: ratio,
 });
 
 export const setStepFrames = (startFrame, endFrame) => ({

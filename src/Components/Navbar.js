@@ -13,12 +13,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import './/Navbar.css';
+import { connect } from 'react-redux';
+import { setVideoInfo, setNumOfFramesToSkip, setCurrentFrame, setStepFrames, setVideoState, setVideoFilename, setDanceSteps } from '../redux/actions';
+
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Dashboard', 'Logout'];
 
-function Navbar({ isLoggedIn, handleLogout}) {
+function Navbar({ isLoggedIn, handleLogout, danceSteps, setDanceSteps}) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);  
+
+  console.log("Dance steps are 123:", danceSteps);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -28,6 +33,8 @@ function Navbar({ isLoggedIn, handleLogout}) {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+
 
 
 
@@ -157,4 +164,13 @@ function ProfileIcon() {
           </Box>
     )
 }
-export default Navbar;
+
+const mapStateToProps = (state) => ({
+  danceSteps: state.danceSteps,
+});
+
+const mapDispatchToProps = {
+  setDanceSteps,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

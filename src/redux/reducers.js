@@ -12,6 +12,7 @@ import {
     SET_VIDEO_STATE,
     UPDATE_DISPLAYED_STEP,
     SET_DANCE_STEPS,
+    SET_VIDEO_RATIO,
   } from './actions';
   
   const initialState = {
@@ -32,10 +33,14 @@ import {
     videoState: {currentState: true, frame: 3},
     updateDisplayedStep: {frameNumber: 1},
     danceSteps: [],
+    videoRatio: '9:16'
   };
   
   const rootReducer = (state = initialState, action) => {
     switch (action.type) {
+      case SET_VIDEO_RATIO:
+        console.log("The video ratio is :", action.payload);
+        return {...state, videoRatio: action.payload};
       case SET_DANCE_STEPS:
         console.log("The dance step array is:", action.payload);
         return {...state, danceSteps: action.payload};
