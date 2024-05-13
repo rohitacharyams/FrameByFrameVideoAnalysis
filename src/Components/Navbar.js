@@ -1,42 +1,37 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import LoginSignupPopup from './LoginSignupPopup';
-import ProfileIcon from './ProfileIcon';
-import './/Navbar.css';
-import { useRecoilState } from 'recoil';
-import { isLoggedInAtom } from '../Recoil/atoms';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import LoginSignupPopup from "./LoginSignupPopup";
+import ProfileIcon from "./ProfileIcon";
+import ".//Navbar.css";
+import { useRecoilState } from "recoil";
+import { isLoggedInAtom } from "../Recoil/atoms";
 
-
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ["Products", "Pricing", "Blog"];
 
 function Navbar() {
-
-  const [anchorElNav, setAnchorElNav] = React.useState(null);  
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
- 
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-
-
   return (
-    <AppBar position="fixed" className='navbar'>
+    <AppBar position="fixed" className="navbar">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -46,18 +41,18 @@ function Navbar() {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
             Dance.ai
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -72,18 +67,18 @@ function Navbar() {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: "block", md: "none" },
               }}
             >
               {pages.map((page) => (
@@ -93,35 +88,43 @@ function Navbar() {
               ))}
             </Menu>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
             ))}
           </Box>
-         {isLoggedIn ? <ProfileIcon/> : <LoginSignupButton/>}
-         </Toolbar>
+          {isLoggedIn ? <ProfileIcon /> : <LoginSignupButton />}
+        </Toolbar>
       </Container>
     </AppBar>
   );
 }
 
 function LoginSignupButton() {
-    const [open, setOpen] = React.useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+  const [open, setOpen] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
 
-    return (
-        <Box sx={{ flexGrow: 0}}>
-            <Button variant="contained" color="primary" onClick={()=>{console.log("isloggedIn" + isLoggedIn); setIsLoggedIn(!isLoggedIn)}}>Login/Signup</Button>
-            {open ? <LoginSignupPopup open={open} setOpen={setOpen}/> : null}
-        </Box>
-    )
+  return (
+    <Box sx={{ flexGrow: 0 }}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          console.log("isloggedIn" + isLoggedIn);
+          setIsLoggedIn(!isLoggedIn);
+        }}
+      >
+        Login/Signup
+      </Button>
+      {open ? <LoginSignupPopup open={open} setOpen={setOpen} /> : null}
+    </Box>
+  );
 }
-
 
 export default Navbar;

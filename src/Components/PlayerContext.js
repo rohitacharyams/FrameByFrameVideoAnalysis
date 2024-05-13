@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef } from 'react';
+import React, { createContext, useContext, useRef } from "react";
 
 // Create a context with an undefined initial value.
 export const PlayerContext = createContext(undefined);

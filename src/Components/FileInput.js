@@ -1,6 +1,11 @@
-import React from 'react';
-import { useRecoilState } from 'recoil';
-import { videoInfoAtom, frameRateAtom, videoFilenameAtom, thumbnailUrlAtom } from '../Recoil/atoms';
+import React from "react";
+import { useRecoilState } from "recoil";
+import {
+  videoInfoAtom,
+  frameRateAtom,
+  videoFilenameAtom,
+  thumbnailUrlAtom,
+} from "../Recoil/atoms";
 
 const FileInput = () => {
   // Recoil states :
@@ -9,24 +14,22 @@ const FileInput = () => {
   const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
   const [thumbnailUrl, setThumbnailUrl] = useRecoilState(thumbnailUrlAtom);
 
-
   const handleFileChange = (event) => {
-    console.log("Clickeddddd")
+    console.log("Clickeddddd");
     const file = event.target.files[0];
 
     if (file) {
       const formData = new FormData();
-      formData.append('video', file);
+      formData.append("video", file);
       setVideoFilename(file.name);
       console.log("File name is ", file.name);
-      fetch('http://localhost:51040/upload', {
-        method: 'POST',
+      fetch("http://localhost:51040/upload", {
+        method: "POST",
         body: formData,
       })
         .then((response) => {
-
           if (!response.ok) {
-            throw new Error('Failed to upload video');
+            throw new Error("Failed to upload video");
           }
           return response.json();
         })
@@ -36,25 +39,27 @@ const FileInput = () => {
           });
           setThumbnailUrl(data.thumbnailUrl);
           fetch(`http://localhost:51040/get_frame_info`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({ videoFilename: file.name }),
           })
-            .then(response => {
+            .then((response) => {
               if (!response.ok) {
-                throw new Error('Failed to get frame info');
+                throw new Error("Failed to get frame info");
               }
               return response.json();
             })
-            .then(data => {
+            .then((data) => {
               const frameRate = parseInt(data.frameRate);
               setFrameRate(frameRate);
             })
-            .catch(error => console.error('Error getting frame rate:', error));
+            .catch((error) =>
+              console.error("Error getting frame rate:", error)
+            );
         })
-        .catch((error) => console.error('Error uploading video:', error));
+        .catch((error) => console.error("Error uploading video:", error));
     }
   };
 
