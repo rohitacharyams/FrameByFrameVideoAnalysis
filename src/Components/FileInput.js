@@ -18,11 +18,13 @@ const FileInput = () => {
       const formData = new FormData();
       formData.append('video', file);
       setVideoFilename(file.name);
-      fetch('http://localhost:61987/upload', {
+      console.log("File name is ", file.name);
+      fetch('http://localhost:51040/upload', {
         method: 'POST',
         body: formData,
       })
         .then((response) => {
+
           if (!response.ok) {
             throw new Error('Failed to upload video');
           }
@@ -33,7 +35,7 @@ const FileInput = () => {
             videoUrl: data.videoUrl,
           });
           setThumbnailUrl(data.thumbnailUrl);
-          fetch(`http://localhost:61987/get_frame_info`, {
+          fetch(`http://localhost:51040/get_frame_info`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
