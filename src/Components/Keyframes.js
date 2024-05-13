@@ -68,7 +68,7 @@ const Keyframes = () => {
     setKeyframeBool({ keyFrameInActive: true, keyFrameOutActive: false });
 
     console.log("Setting video state to pause, current frame", currentFrame);
-    setVideoState(true, 1)
+    setVideoState({currentState: true, frame: 1});
   };
 
   const handleAddKeyframeOut = () => {
@@ -102,7 +102,7 @@ const Keyframes = () => {
 
     // I need something to first pause the video for a sec and then 
     console.log("Setting video state to pause, current frame", frameNumber);
-    setVideoState(false, 2);
+    setVideoState({currentState: false, frame: 2});
     console.log("The value of danceSteps array are :", danceSteps);
 
   };
@@ -110,14 +110,14 @@ const Keyframes = () => {
   const handlePlayStep = (step) => {
     // Pass the start and end frames to the VideoPlayer component
     console.log('Passing props');
-    setStepFrames(step.keyFrameIn, step.keyFrameOut);
+    setStepFrames({startFrame: step.keyFrameIn, endFrame: step.keyFrameOut});
     console.log('stepFrames after dispatch:', stepFrames);
     
   };
 
   const handleLabellingDone = () => {
     console.log(videoFilename);
-    fetch('http://localhost:61987/save_keyframes', {
+    fetch('http://localhost:51040/save_keyframes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
