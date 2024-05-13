@@ -1,186 +1,190 @@
-import React, { useRef, useState, useEffect } from 'react';
-import ReactPlayer from 'react-player';
-import { useRecoilState } from 'recoil';
-import { stepFramesAtom, videoInfoAtom, frameRateAtom, currentFrameAtom, numOfFramesToSkipAtom, videoStateAtom, videoFilenameAtom, danceStepsAtom } from '../Recoil/atoms';
+import React, { useRef, useState, useEffect } from "react";
+import ReactPlayer from "react-player";
+import { useRecoilState } from "recoil";
+import {
+  stepFramesAtom,
+  videoInfoAtom,
+  frameRateAtom,
+  currentFrameAtom,
+  numOfFramesToSkipAtom,
+  videoStateAtom,
+  videoFilenameAtom,
+  danceStepsAtom,
+} from "../Recoil/atoms";
 
-import './/CustomControls.css';
-import DanceStepsManager from './DanceStepsManager';
+import ".//CustomControls.css";
+import DanceStepsManager from "./DanceStepsManager";
 
 const CustomVideoPlayer = () => {
-    // Recoil states :
-    const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
-    const [videoInfo, setVideoInfo] = useRecoilState(videoInfoAtom);
-    const [frameRate, setFrameRate] = useRecoilState(frameRateAtom);
-    const [currentFrame, setCurrentFrame] = useRecoilState(currentFrameAtom);
-    const [numOfFramesToSkip, setNumOfFramesToSkip] = useRecoilState(numOfFramesToSkipAtom);
-    const [videoState, setVideoState] = useRecoilState(videoStateAtom);
-    const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
-    const [danceSteps, setDanceSteps] = useRecoilState(danceStepsAtom);
+  // Recoil states :
+  const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
+  const [videoInfo, setVideoInfo] = useRecoilState(videoInfoAtom);
+  const [frameRate, setFrameRate] = useRecoilState(frameRateAtom);
+  const [currentFrame, setCurrentFrame] = useRecoilState(currentFrameAtom);
+  const [numOfFramesToSkip, setNumOfFramesToSkip] = useRecoilState(
+    numOfFramesToSkipAtom
+  );
+  const [videoState, setVideoState] = useRecoilState(videoStateAtom);
+  const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
+  const [danceSteps, setDanceSteps] = useRecoilState(danceStepsAtom);
 
-    const playerRef = useRef(null);
-    const [playing, setPlaying] = useState(false);
-    const [currentStep, setCurrentStep] = useState(null);
-    const [loop, setLoop] = useState(false);
+  const playerRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const [currentStep, setCurrentStep] = useState(null);
+  const [loop, setLoop] = useState(false);
 
-    console.log("videoInfo:", videoInfo);
-    console.log("DanceSteps are :", danceSteps);
-    const [showSteps, setShowSteps] = useState(false);
-    const [currentStepIndex, setCurrentStepIndex] = useState(0);
-    const [mirrored, setMirrored] = useState(false);
+  console.log("videoInfo:", videoInfo);
+  console.log("DanceSteps are :", danceSteps);
+  const [showSteps, setShowSteps] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [mirrored, setMirrored] = useState(false);
 
-    const toggleSteps = () => {
-        setShowSteps(!showSteps); // Toggle visibility of steps
-    };
+  const toggleSteps = () => {
+    setShowSteps(!showSteps); // Toggle visibility of steps
+  };
 
-    const togglePlay = () => {
-        setPlaying(!playing);
-    };
+  const togglePlay = () => {
+    setPlaying(!playing);
+  };
 
-    const toggleMirroring = () => {
-        setMirrored(!mirrored);  // Toggle mirroring state
-    };
+  const toggleMirroring = () => {
+    setMirrored(!mirrored); // Toggle mirroring state
+  };
 
-    useEffect(() => {
-        if (playerRef.current && playerRef.current.getInternalPlayer()) {
-            const videoElement = playerRef.current.getInternalPlayer();
-            videoElement.style.transform = mirrored ? 'scaleX(-1)' : 'scaleX(1)';
+  useEffect(() => {
+    if (playerRef.current && playerRef.current.getInternalPlayer()) {
+      const videoElement = playerRef.current.getInternalPlayer();
+      videoElement.style.transform = mirrored ? "scaleX(-1)" : "scaleX(1)";
+    }
+  }, [mirrored]);
+
+  const playStep = (step) => {
+    if (!step) return;
+    console.log("Heyyy therere here is the new step with values", step);
+    setCurrentStep(step);
+    const startSeconds = step.keyFrameIn / frameRate;
+    const endSeconds = step.keyFrameOut / frameRate;
+
+    playerRef.current.seekTo(startSeconds, "seconds");
+    setPlaying(true);
+
+    if (playerRef.current.loopInterval) {
+      clearInterval(playerRef.current.loopInterval);
+      playerRef.current.loopInterval = null;
+    }
+
+    if (playerRef.current.stopTimeout) {
+      clearTimeout(playerRef.current.stopTimeout);
+      playerRef.current.stopTimeout = null;
+    }
+
+    if (loop) {
+      playerRef.current.loopInterval = setInterval(() => {
+        if (playerRef.current.getCurrentTime() >= endSeconds) {
+          playerRef.current.seekTo(startSeconds, "seconds");
         }
-    }, [mirrored]);
+      }, 100);
+    } else {
+      // Stop playing when the end of the step is reached
 
-
-    const playStep = (step) => {
-        if (!step) return;
-        console.log("Heyyy therere here is the new step with values", step);
-        setCurrentStep(step);
-        const startSeconds = step.keyFrameIn / frameRate;  
-        const endSeconds = step.keyFrameOut / frameRate;
-
-        
-        
-        playerRef.current.seekTo(startSeconds, 'seconds');
-        setPlaying(true);
-
-        if (playerRef.current.loopInterval) {
-            
-            clearInterval(playerRef.current.loopInterval);
-            playerRef.current.loopInterval = null;
+      const timeout = setTimeout(() => {
+        if (playerRef.current.getCurrentTime() >= endSeconds) {
+          setPlaying(false);
         }
+      }, endSeconds - startSeconds * 1000); // Convert to milliseconds
 
-        if (playerRef.current.stopTimeout) {
-            clearTimeout(playerRef.current.stopTimeout);
-            playerRef.current.stopTimeout = null;
-        }
+      return () => clearTimeout(timeout);
+    }
+  };
 
-        
+  useEffect(() => {
+    if (currentStep) {
+      playStep(currentStep);
+    }
+  }, [currentStep, loop]);
 
-        if (loop) {
-            playerRef.current.loopInterval = setInterval(() => {
-                
-                if (playerRef.current.getCurrentTime() >= endSeconds) {
-                    
-                    playerRef.current.seekTo(startSeconds, 'seconds');
-                }
-            }, 100);
-        } else {
-            // Stop playing when the end of the step is reached
-            
-            const timeout = setTimeout(() => {
-                
-                if (playerRef.current.getCurrentTime() >= endSeconds) {
-                    
-                    setPlaying(false);
-                }
-            }, endSeconds-startSeconds * 1000); // Convert to milliseconds
+  useEffect(() => {
+    if (!loop && playerRef.current.loopInterval) {
+      clearInterval(playerRef.current.loopInterval);
+      playerRef.current.loopInterval = null;
+    }
+  }, [loop]);
 
-            return () => clearTimeout(timeout);
-        }
+  const toggleLoop = () => {
+    setLoop(!loop);
+    if (!loop) {
+      playStep(currentStep); // Restart playing with loop if toggled on
+    }
+  };
 
-      };
+  const handleStepChange = (step) => {
+    setCurrentStep(step);
+    // setLoop(false); // Stop looping when a new step is selected
+  };
 
-      useEffect(() => {
-        if (currentStep) {
-            playStep(currentStep);
-        }
-    }, [currentStep, loop]);
+  useEffect(() => {
+    playStep(currentStepIndex);
+  }, [currentStepIndex]);
 
-    useEffect(() => {
-        if (!loop && playerRef.current.loopInterval) {
-            clearInterval(playerRef.current.loopInterval);
-            playerRef.current.loopInterval = null;
-        }
-    }, [loop]);
+  const handleNextStep = () => {
+    console.log("Current value of step is this :", currentStep.newStepId);
+    var nextStep = null;
+    if (currentStep.newStepId + 1 < danceSteps.length) {
+      nextStep = danceSteps[currentStep.newStepId + 1];
+      handleStepChange(nextStep);
+      setCurrentStep(nextStep);
+    }
 
-    const toggleLoop = () => {
-        setLoop(!loop);
-        if (!loop) {
-            playStep(currentStep); // Restart playing with loop if toggled on
-        }
-    };
+    //setCurrentStepIndex(prev => (prev + 1) % danceSteps.length);
+  };
 
-    const handleStepChange = (step) => {
-        setCurrentStep(step);
-        // setLoop(false); // Stop looping when a new step is selected
-    };
+  const handlePreviousStep = () => {
+    var prevStep = null;
+    if (currentStep.newStepId - 1 >= 0) {
+      prevStep = danceSteps[currentStep.newStepId - 1];
+      handleStepChange(prevStep);
+      setCurrentStep(prevStep);
+    }
+  };
 
-    useEffect(() => {
-        playStep(currentStepIndex);
-    }, [currentStepIndex]);
-
-    const handleNextStep = () => {
-        console.log("Current value of step is this :", currentStep.newStepId);
-        var nextStep = null;
-        if(currentStep.newStepId + 1 < danceSteps.length){
-            nextStep = danceSteps[currentStep.newStepId + 1]
-            handleStepChange(nextStep);
-            setCurrentStep(nextStep);
-        }
-        
-        //setCurrentStepIndex(prev => (prev + 1) % danceSteps.length);
-    };
-
-    const handlePreviousStep = () => {
-        var prevStep = null;
-        if(currentStep.newStepId - 1 >= 0)
-        {
-            prevStep = danceSteps[currentStep.newStepId - 1];
-            handleStepChange(prevStep);
-            setCurrentStep(prevStep);
-        }
-        
-    };
-
-
-    return (
-        <div className="player-wrapper">
-            <ReactPlayer
-                ref={playerRef}
-                url={videoInfo.videoUrl}
-                playing={playing}
-                controls={true}
-                width="100%"
-                height="100%"
-            />
-            <div className="controls">
-                <button onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
-                <button onClick={() => handlePreviousStep()}>Prev</button>
-                <button onClick={() => handleNextStep()}>Next</button>
-                <button onClick={toggleLoop}>{loop ? 'Stop Loop' : 'Loop'}</button>
-                <button onClick={toggleMirroring}>{mirrored ? 'Unmirror' : 'Mirror'}</button>
-                {/* Additional control buttons */}
-            </div>
-            <div className="right-controls">
-            <button className="steps-button" onClick={toggleSteps}>STEPS</button>
-            <div className="steps-container">
-                {danceSteps.map((step, index) => (
-                    <button key={index} className="button-step" onClick={() => playStep(step)}>
-                    Step {index + 1}
-                    </button>
-                ))}
+  return (
+    <div className="player-wrapper">
+      <ReactPlayer
+        ref={playerRef}
+        url={videoInfo.videoUrl}
+        playing={playing}
+        controls={true}
+        width="100%"
+        height="100%"
+      />
+      <div className="controls">
+        <button onClick={togglePlay}>{playing ? "Pause" : "Play"}</button>
+        <button onClick={() => handlePreviousStep()}>Prev</button>
+        <button onClick={() => handleNextStep()}>Next</button>
+        <button onClick={toggleLoop}>{loop ? "Stop Loop" : "Loop"}</button>
+        <button onClick={toggleMirroring}>
+          {mirrored ? "Unmirror" : "Mirror"}
+        </button>
+        {/* Additional control buttons */}
+      </div>
+      <div className="right-controls">
+        <button className="steps-button" onClick={toggleSteps}>
+          STEPS
+        </button>
+        <div className="steps-container">
+          {danceSteps.map((step, index) => (
+            <button
+              key={index}
+              className="button-step"
+              onClick={() => playStep(step)}
+            >
+              Step {index + 1}
+            </button>
+          ))}
         </div>
-            </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default CustomVideoPlayer;
-

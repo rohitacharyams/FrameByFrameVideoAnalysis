@@ -1,22 +1,38 @@
 // components/VideoPlayer.js
 
-import React, { useState, useRef, useEffect, createContext } from 'react';
-import ReactPlayer from 'react-player';
-import { Slider, Button, Typography, Grid, Box, Container, ThemeProvider, createTheme } from '@mui/material';
-import { VideoPlayerContext } from './VideoPlayerContext';
-import { usePlayer } from './PlayerContext';
-import axios from 'axios';
-import { useRecoilState } from 'recoil';
-import { videoInfoAtom, frameRateAtom, currentFrameAtom, numOfFramesToSkipAtom, stepFramesAtom, videoStateAtom, videoFilenameAtom } from '../Recoil/atoms';
-
+import React, { useState, useRef, useEffect, createContext } from "react";
+import ReactPlayer from "react-player";
+import {
+  Slider,
+  Button,
+  Typography,
+  Grid,
+  Box,
+  Container,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
+import { VideoPlayerContext } from "./VideoPlayerContext";
+import { usePlayer } from "./PlayerContext";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import {
+  videoInfoAtom,
+  frameRateAtom,
+  currentFrameAtom,
+  numOfFramesToSkipAtom,
+  stepFramesAtom,
+  videoStateAtom,
+  videoFilenameAtom,
+} from "../Recoil/atoms";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#007bff', // Blue
+      main: "#007bff", // Blue
     },
     secondary: {
-      main: '#f5f5f5', // Light gray
+      main: "#f5f5f5", // Light gray
     },
   },
 });
@@ -26,11 +42,12 @@ const VideoPlayer = () => {
   const [videoInfo, setVideoInfo] = useRecoilState(videoInfoAtom);
   const [frameRate, setFrameRate] = useRecoilState(frameRateAtom);
   const [currentFrame, setCurrentFrame] = useRecoilState(currentFrameAtom);
-  const [numOfFramesToSkip, setNumOfFramesToSkip] = useRecoilState(numOfFramesToSkipAtom);
+  const [numOfFramesToSkip, setNumOfFramesToSkip] = useRecoilState(
+    numOfFramesToSkipAtom
+  );
   const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
   const [videoState, setVideoState] = useRecoilState(videoStateAtom);
   const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
-
 
   // const playerRef = useRef(null);
   const { playerRef } = usePlayer();
@@ -46,8 +63,7 @@ const VideoPlayer = () => {
 
   const getCurrentTime = () => {
     return playerRef.current ? playerRef.current.getCurrentTime() : 0;
-};
-
+  };
 
   const [loopCount, setLoopCount] = useState(0);
 
@@ -60,7 +76,7 @@ const VideoPlayer = () => {
     const frameNumber = Math.floor(state.playedSeconds * frameRate);
     setCurrentFrame(frameNumber);
     console.log("value of current frame is", currentFrame, frameNumber);
-     // Dispatch action to update current frame in the Redux store
+    // Dispatch action to update current frame in the Redux store
   };
 
   const handleSeek = (e) => {
@@ -74,12 +90,18 @@ const VideoPlayer = () => {
   };
 
   const handleNextFrame = () => {
-    playerRef.current.seekTo(playerRef.current.getCurrentTime() + numOfFramesToSkip / frameRate, 'seconds');
+    playerRef.current.seekTo(
+      playerRef.current.getCurrentTime() + numOfFramesToSkip / frameRate,
+      "seconds"
+    );
     setCurrentFrame((prevFrame) => prevFrame + numOfFramesToSkip);
   };
 
   const handlePrevFrame = () => {
-    playerRef.current.seekTo(playerRef.current.getCurrentTime() - numOfFramesToSkip / frameRate, 'seconds');
+    playerRef.current.seekTo(
+      playerRef.current.getCurrentTime() - numOfFramesToSkip / frameRate,
+      "seconds"
+    );
     setCurrentFrame((prevFrame) => Math.max(0, prevFrame - numOfFramesToSkip));
   };
 
@@ -98,7 +120,7 @@ const VideoPlayer = () => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     const player = playerRef.current;
 
     const drawTimeline = () => {
@@ -109,7 +131,7 @@ const VideoPlayer = () => {
 
       for (let time = 0; time <= duration; time += 1 / frameRate) {
         const framePosition = time * frameRate;
-        context.fillStyle = 'red';
+        context.fillStyle = "red";
         context.fillRect(framePosition, 0, 1, 30);
         // console.log('Drawing frame at', framePosition);
       }
@@ -123,47 +145,57 @@ const VideoPlayer = () => {
     if (playerContainerRef.current) {
       if (playerContainerRef.current.requestFullscreen) {
         playerContainerRef.current.requestFullscreen();
-      } else if (playerContainerRef.current.mozRequestFullScreen) { /* Firefox */
+      } else if (playerContainerRef.current.mozRequestFullScreen) {
+        /* Firefox */
         playerContainerRef.current.mozRequestFullScreen();
-      } else if (playerContainerRef.current.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+      } else if (playerContainerRef.current.webkitRequestFullscreen) {
+        /* Chrome, Safari & Opera */
         playerContainerRef.current.webkitRequestFullscreen();
-      } else if (playerContainerRef.current.msRequestFullscreen) { 
-        console.log("Here");/* IE/Edge */
+      } else if (playerContainerRef.current.msRequestFullscreen) {
+        console.log("Here"); /* IE/Edge */
         playerContainerRef.current.msRequestFullscreen();
       }
-      playerContainerRef.current.style.width = '100%';
-      playerContainerRef.current.style.height = '100%';
+      playerContainerRef.current.style.width = "100%";
+      playerContainerRef.current.style.height = "100%";
     }
   };
 
   // Function to play a particular step from frame A to frame B
   const playStepFrames = (stepFrames) => {
-
-    console.log("startFrame and endframes are :", stepFrames.startFrame, stepFrames.end);
+    console.log(
+      "startFrame and endframes are :",
+      stepFrames.startFrame,
+      stepFrames.end
+    );
     if (stepFrames && Object.keys(stepFrames).length !== 0) {
+      const startSeconds = stepFrames.startFrame / frameRate;
+      const endSeconds = stepFrames.endFrame / frameRate;
 
-    const startSeconds = stepFrames.startFrame / frameRate;
-    const endSeconds = stepFrames.endFrame / frameRate;
+      console.log(
+        "Start and end frames are",
+        stepFrames.startFrame,
+        stepFrames.endFrame,
+        startSeconds,
+        endSeconds
+      );
 
-    console.log("Start and end frames are", stepFrames.startFrame, stepFrames.endFrame, startSeconds, endSeconds);
+      playerRef.current.seekTo(startSeconds, "seconds");
+      setPlaying(true);
+      // handleFullScreen();
 
-    playerRef.current.seekTo(startSeconds, 'seconds');
-    setPlaying(true);
-    // handleFullScreen();
+      const interval = setInterval(() => {
+        // console.log("current time is:", playerRef.current.getCurrentTime());
+        if (playerRef.current.getCurrentTime() >= endSeconds) {
+          setPlaying(false);
+          clearInterval(interval);
+        }
+      }, 100);
 
-    const interval = setInterval(() => {
-      // console.log("current time is:", playerRef.current.getCurrentTime());
-      if (playerRef.current.getCurrentTime() >= endSeconds) {
-        setPlaying(false);
-        clearInterval(interval);
-      }
-    }, 100);
+      return () => clearInterval(interval);
+    }
+  };
 
-    return () => clearInterval(interval);
-  }
-};
-
-// Step Wise Player
+  // Step Wise Player
   useEffect(() => {
     playStepFrames(stepFrames);
   }, [stepFrames, playbackRate]);
@@ -174,8 +206,7 @@ const VideoPlayer = () => {
     if (playerRef.current && videoState.frame === 1) {
       console.log("Playing the video");
       playerRef.current.getInternalPlayer().play(); // Pause the video
-    }
-    else if (playerRef.current && videoState.frame === 2) {
+    } else if (playerRef.current && videoState.frame === 2) {
       console.log("Pausing the video");
       playerRef.current.getInternalPlayer().pause(); // Pause the video
     }
@@ -183,44 +214,57 @@ const VideoPlayer = () => {
 
   return (
     <VideoPlayerContext.Provider value={{ getCurrentTime }}>
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '450px', position:'relative' }}>
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <div ref={playerContainerRef} style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
-          <ReactPlayer
-            ref={playerRef}
-            url={videoInfo.videoUrl}
-            playing={playing}
-            controls
-            playbackRate={playbackRate}
-            width="100%"
-            height="400px"
-            onProgress={handleProgress}
-            config={{
-              file: {
-                forceVideo: true,
-                attributes: {
-                  controlsList: 'nodownload',
-                },
-              },
-            }}
-          />
-        </div>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button variant="contained" onClick={handlePrevFrame}>
-              Previous Frame
-            </Button>
-            <Button variant="contained" onClick={handleNextFrame}>
-              Next Frame
-            </Button>
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          height: "450px",
+          position: "relative",
+        }}
+      >
+        <ThemeProvider theme={theme}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <div
+              ref={playerContainerRef}
+              style={{ position: "sticky", top: 0, zIndex: 1000 }}
+            >
+              <ReactPlayer
+                ref={playerRef}
+                url={videoInfo.videoUrl}
+                playing={playing}
+                controls
+                playbackRate={playbackRate}
+                width="100%"
+                height="400px"
+                onProgress={handleProgress}
+                config={{
+                  file: {
+                    forceVideo: true,
+                    attributes: {
+                      controlsList: "nodownload",
+                    },
+                  },
+                }}
+              />
+            </div>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Button variant="contained" onClick={handlePrevFrame}>
+                Previous Frame
+              </Button>
+              <Button variant="contained" onClick={handleNextFrame}>
+                Next Frame
+              </Button>
+            </Box>
+
+            <Typography>Current Frame: {currentFrame}</Typography>
+            <canvas
+              ref={canvasRef}
+              sx={{ width: "100%", height: "30px", mt: "20px" }}
+            ></canvas>
           </Box>
-          
-          
-          <Typography>Current Frame: {currentFrame}</Typography>
-          <canvas ref={canvasRef} sx={{ width: '100%', height: '30px', mt: '20px' }}></canvas>
-        </Box>
-      </ThemeProvider>
-    </div>
+        </ThemeProvider>
+      </div>
     </VideoPlayerContext.Provider>
   );
 };

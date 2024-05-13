@@ -1,14 +1,12 @@
-
 .app-container {
-    padding-top: 60px; /* Height of the navbar, adjust if navbar height changes */
-    height: calc(100vh - 64px); /* Adjust the height to exclude the navbar */
-    width: 100%;/* Prevents vertical overflow */
-    
+  padding-top: 60px; /* Height of the navbar, adjust if navbar height changes */
+  height: calc(100vh - 64px); /* Adjust the height to exclude the navbar */
+  width: 100%; /* Prevents vertical overflow */
 }
 
 .player-container {
-    flex-grow: 1;
-    width: 100%;
-    background-color: #000; /* Black background for the video player area */
-    position: relative;
+  flex-grow: 1;
+  width: 100%;
+  background-color: #000; /* Black background for the video player area */
+  position: relative;
 }
