@@ -42,7 +42,6 @@ const Keyframes = () => {
   const navigate = useNavigate();
   
   const { playerRef } = usePlayer();
-  const [currentFrameNumber, setCurrentFrameNumber] = useState(0);
 
 
   const handleAddKeyframeIn = () => {

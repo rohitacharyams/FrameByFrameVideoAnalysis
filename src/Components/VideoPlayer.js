@@ -138,6 +138,8 @@ const VideoPlayer = () => {
 
   // Function to play a particular step from frame A to frame B
   const playStepFrames = (stepFrames) => {
+
+    console.log("startFrame and endframes are :", stepFrames.startFrame, stepFrames.end);
     if (stepFrames && Object.keys(stepFrames).length !== 0) {
 
     const startSeconds = stepFrames.startFrame / frameRate;
