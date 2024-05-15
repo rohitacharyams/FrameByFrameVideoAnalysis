@@ -1,129 +1,77 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import LoginSignupPopup from "./LoginSignupPopup";
-import ProfileIcon from "./ProfileIcon";
-import ".//Navbar.css";
-import { useRecoilState } from "recoil";
-import { isLoggedInAtom } from "../Recoil/atoms";
+import { useState } from "react";
+import LoginPopUp from "./LoginPopUp";
+import SignUpPopUp from "./signUpPopUp";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Home", "About", "Products", "Pricing", "Contact"];
 
 function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showSignUpPopup, setShowSignUpPopup] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+  const handleOpenLoginPopup = () => {
+    setShowLoginPopup(true);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const handleCloseLoginPopup = () => {
+    setShowLoginPopup(false);
   };
 
-  return (
-    <AppBar position="fixed" className="navbar">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Dance.ai
-          </Typography>
+  const handleOpenSignUpPopup = () => {
+    setShowSignUpPopup(true);
+  }
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-          {isLoggedIn ? <ProfileIcon /> : <LoginSignupButton />}
-        </Toolbar>
-      </Container>
-    </AppBar>
-  );
-}
-
-function LoginSignupButton() {
-  const [open, setOpen] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+  const handleCloseSignUpPopup = () => {
+    setShowSignUpPopup(false);
+  }
 
   return (
-    <Box sx={{ flexGrow: 0 }}>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          console.log("isloggedIn" + isLoggedIn);
-          setIsLoggedIn(!isLoggedIn);
-        }}
-      >
-        Login/Signup
-      </Button>
-      {open ? <LoginSignupPopup open={open} setOpen={setOpen} /> : null}
-    </Box>
+    <nav className="bg-white w-full px-4 py-2 flex justify-between">
+      <div className="flex items-center">
+        <div className="text-xl font-bold text-gray-800">Dance.AI</div>
+      </div>
+
+      <ul className="hidden md:flex space-x-4">
+        {/* Add dynamic elements from the pages array if needed */}
+        {pages.map((page) => (
+          <li key={page}>
+            <div className="px-3 py-2 rounded-full hover:bg-gray-100">
+              {page}
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex items-center md:space-x-2">
+        <div
+          className="px-3 py-2 rounded-full border border-gray-200 hover:bg-gray-300 cursor-pointer"
+          onClick={handleOpenLoginPopup}
+        >
+          Login
+        </div>
+        <div>
+          {showLoginPopup && (
+            <LoginPopUp
+              showPopup={showLoginPopup}
+              onClose={handleCloseLoginPopup}
+            />
+          )}
+        </div>
+        <div
+          className="px-3 py-2 rounded-full bg-violet-500 text-white hover:bg-violet-700 cursor-pointer"
+          onClick={handleOpenSignUpPopup}
+        >
+          Sign Up
+        </div>
+        <div>
+          {showSignUpPopup && (
+            <SignUpPopUp
+              showPopup={showSignUpPopup}
+              onClose={handleCloseSignUpPopup}
+            />
+          )}
+        </div>
+      </div>
+    </nav>
   );
 }
 
