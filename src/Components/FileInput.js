@@ -1,23 +1,35 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { setVideoInfo, setFrameRate, setVideoFilename, setThumbnailUrl } from '../redux/actions';
+import React from "react";
+import { useRecoilState } from "recoil";
+import {
+  videoInfoAtom,
+  frameRateAtom,
+  videoFilenameAtom,
+  thumbnailUrlAtom,
+} from "../Recoil/atoms";
 
-const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
+const FileInput = () => {
+  // Recoil states :
+  const [videoInfo, setVideoInfo] = useRecoilState(videoInfoAtom);
+  const [frameRate, setFrameRate] = useRecoilState(frameRateAtom);
+  const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
+  const [thumbnailUrl, setThumbnailUrl] = useRecoilState(thumbnailUrlAtom);
+
   const handleFileChange = (event) => {
-    console.log("Clickeddddd")
+    console.log("Clickeddddd");
     const file = event.target.files[0];
 
     if (file) {
       const formData = new FormData();
-      formData.append('video', file);
+      formData.append("video", file);
       setVideoFilename(file.name);
-      fetch('http://localhost:61987/upload', {
-        method: 'POST',
+      console.log("File name is ", file.name);
+      fetch("http://localhost:51040/upload", {
+        method: "POST",
         body: formData,
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Failed to upload video');
+            throw new Error("Failed to upload video");
           }
           return response.json();
         })
@@ -26,26 +38,28 @@ const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
             videoUrl: data.videoUrl,
           });
           setThumbnailUrl(data.thumbnailUrl);
-          fetch(`http://localhost:61987/get_frame_info`, {
-            method: 'POST',
+          fetch(`http://localhost:51040/get_frame_info`, {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({ videoFilename: file.name }),
           })
-            .then(response => {
+            .then((response) => {
               if (!response.ok) {
-                throw new Error('Failed to get frame info');
+                throw new Error("Failed to get frame info");
               }
               return response.json();
             })
-            .then(data => {
+            .then((data) => {
               const frameRate = parseInt(data.frameRate);
               setFrameRate(frameRate);
             })
-            .catch(error => console.error('Error getting frame rate:', error));
+            .catch((error) =>
+              console.error("Error getting frame rate:", error)
+            );
         })
-        .catch((error) => console.error('Error uploading video:', error));
+        .catch((error) => console.error("Error uploading video:", error));
     }
   };
 
@@ -56,18 +70,4 @@ const FileInput = ({ setVideoInfo, setFrameRate, setVideoFilename }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-    frameRate: state.frameRate,
-    videoInfo: state.setVideoInfo,
-    videoFilename: state.videoFilename,
-    thumbnailUrl: state.thumbnailUrl,
-});
-
-const mapDispatchToProps = {
-  setVideoInfo,
-  setFrameRate,
-  setVideoFilename,
-  setThumbnailUrl,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FileInput);
+export default FileInput;

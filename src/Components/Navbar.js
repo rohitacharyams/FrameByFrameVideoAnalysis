@@ -1,176 +1,80 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import './/Navbar.css';
-import { connect } from 'react-redux';
-import { setVideoInfo, setNumOfFramesToSkip, setCurrentFrame, setStepFrames, setVideoState, setVideoFilename, setDanceSteps } from '../redux/actions';
+import { useState } from "react";
+import LoginPopUp from "./LoginPopUp";
+import SignUpPopUp from "./signUpPopUp";
 
+const pages = ["Home", "About", "Products", "Pricing", "Contact"];
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Dashboard', 'Logout'];
+function Navbar() {
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showSignUpPopup, setShowSignUpPopup] = useState(false);
 
-function Navbar({ isLoggedIn, handleLogout, danceSteps, setDanceSteps}) {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);  
-
-  console.log("Dance steps are 123:", danceSteps);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
- 
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const handleOpenLoginPopup = () => {
+    setShowLoginPopup(true);
   };
 
+  const handleCloseLoginPopup = () => {
+    setShowLoginPopup(false);
+  };
 
+  const handleOpenSignUpPopup = () => {
+    setShowSignUpPopup(true);
+  }
+
+  const handleCloseSignUpPopup = () => {
+    setShowSignUpPopup(false);
+  }
 
 
 
   return (
-    <AppBar position="fixed" className='navbar'>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Dance.ai
-          </Typography>
+    <nav className="bg-white w-full px-4 py-2 flex justify-between">
+      <div className="flex items-center">
+        <div className="text-xl font-bold text-gray-800">Dance.AI</div>
+      </div>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-         {isLoggedIn ? <ProfileIcon/> : <LoginSignup/>}
-         </Toolbar>
-      </Container>
-    </AppBar>
+      <ul className="hidden md:flex space-x-4">
+        {/* Add dynamic elements from the pages array if needed */}
+        {pages.map((page) => (
+          <li key={page}>
+            <div className="px-3 py-2 rounded-full hover:bg-gray-100">
+              {page}
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex items-center md:space-x-2">
+        <div
+          className="px-3 py-2 rounded-full border border-gray-200 hover:bg-gray-300 cursor-pointer"
+          onClick={handleOpenLoginPopup}
+        >
+          Login
+        </div>
+        <div>
+          {showLoginPopup && (
+            <LoginPopUp
+              showPopup={showLoginPopup}
+              onClose={handleCloseLoginPopup}
+            />
+          )}
+        </div>
+        <div
+          className="px-3 py-2 rounded-full bg-violet-500 text-white hover:bg-violet-700 cursor-pointer"
+          onClick={handleOpenSignUpPopup}
+        >
+          Sign Up
+        </div>
+        <div>
+          {showSignUpPopup && (
+            <SignUpPopUp
+              showPopup={showSignUpPopup}
+              onClose={handleCloseSignUpPopup}
+            />
+          )}
+        </div>
+      </div>
+    </nav>
   );
 }
 
-function LoginSignup() {
-    return (
-        <Box sx={{ flexGrow: 0}}>
-            <Button variant="contained" color="primary" >Login/Signup</Button>
-        </Box>
-    )
-}
-
-function ProfileIcon() {
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-      };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-      };
-    return (
-    <Box sx={{ flexGrow: 0}}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-    )
-}
-
-const mapStateToProps = (state) => ({
-  danceSteps: state.danceSteps,
-});
-
-const mapDispatchToProps = {
-  setDanceSteps,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default Navbar;

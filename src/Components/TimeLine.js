@@ -1,8 +1,8 @@
 // components/Timeline.js
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 // import { setFrame } from '../redux/actions';
-import VideoThumbnail from 'react-video-thumbnail';
+import VideoThumbnail from "react-video-thumbnail";
 
 const ThumbnailWidth = 50; // Adjust the thumbnail width as needed
 
@@ -18,9 +18,9 @@ const Timeline = () => {
   return (
     <div
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        position: 'relative',
+        display: "flex",
+        alignItems: "center",
+        position: "relative",
       }}
     >
       {[...Array(100).keys()].map((frame) => (
@@ -28,14 +28,14 @@ const Timeline = () => {
           key={frame}
           style={{
             width: ThumbnailWidth,
-            height: '60px', // Adjust the height as needed
-            marginRight: '2px',
-            cursor: 'pointer',
+            height: "60px", // Adjust the height as needed
+            marginRight: "2px",
+            cursor: "pointer",
           }}
           onClick={() => handleFrameClick(frame)}
         >
           <VideoThumbnail
-            videoUrl="http://localhost:61987/upload/boy_-_21827 (Original).mp4"
+            videoUrl="http://localhost:51040/upload/boy_-_21827 (Original).mp4"
             width={ThumbnailWidth}
             height={60} // Adjust the height as needed
             frameCount={100} // Total number of frames in your video

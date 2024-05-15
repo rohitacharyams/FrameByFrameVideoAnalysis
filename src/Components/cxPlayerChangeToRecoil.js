@@ -1,33 +1,40 @@
 import React, { useRef, useState, useEffect } from "react";
 import ReactPlayer from "react-player";
-import { useRecoilState } from "recoil";
+import { connect } from "react-redux";
 import {
-  stepFramesAtom,
-  videoInfoAtom,
-  frameRateAtom,
-  currentFrameAtom,
-  numOfFramesToSkipAtom,
-  videoStateAtom,
-  videoFilenameAtom,
-  danceStepsAtom,
-} from "../Recoil/atoms";
+  setVideoInfo,
+  setNumOfFramesToSkip,
+  setCurrentFrame,
+  setStepFrames,
+  setVideoState,
+  setVideoFilename,
+  setDanceSteps,
+  setVideoRatio,
+} from "../redux/actions";
+import { Button } from "@mui/material";
 
 import ".//CustomControls.css";
 import DanceStepsManager from "./DanceStepsManager";
 
-const CustomVideoPlayer = () => {
-  // Recoil states :
-  const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
-  const [videoInfo, setVideoInfo] = useRecoilState(videoInfoAtom);
-  const [frameRate, setFrameRate] = useRecoilState(frameRateAtom);
-  const [currentFrame, setCurrentFrame] = useRecoilState(currentFrameAtom);
-  const [numOfFramesToSkip, setNumOfFramesToSkip] = useRecoilState(
-    numOfFramesToSkipAtom
-  );
-  const [videoState, setVideoState] = useRecoilState(videoStateAtom);
-  const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
-  const [danceSteps, setDanceSteps] = useRecoilState(danceStepsAtom);
-
+const CustomVideoPlayer = ({
+  stepFrames,
+  videoInfo,
+  frameRate,
+  currentFrame,
+  numOfFramesToSkip,
+  setCurrentFrame,
+  setNumOfFramesToSkip,
+  setStepFrames,
+  setVideoState,
+  videoState,
+  setVideoInfo,
+  setVideoFilename,
+  videoFilename,
+  danceSteps,
+  setDanceSteps,
+  setVideoRatio,
+  videoRatio,
+}) => {
   const playerRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(null);
@@ -156,6 +163,10 @@ const CustomVideoPlayer = () => {
         controls={true}
         width="100%"
         height="100%"
+        onEnded={() => {
+          if (!loop) setPlaying(false);
+        }}
+        key={currentStep ? currentStep.KeyframeIn : "default-key"}
       />
       <div className="controls">
         <button onClick={togglePlay}>{playing ? "Pause" : "Play"}</button>
@@ -173,12 +184,8 @@ const CustomVideoPlayer = () => {
         </button>
         <div className="steps-container">
           {danceSteps.map((step, index) => (
-            <button
-              key={index}
-              className="button-step"
-              onClick={() => playStep(step)}
-            >
-              Step {index + 1}
+            <button key={index} onClick={() => handleStepChange(step)}>
+              {`Step ${index + 1}`}
             </button>
           ))}
         </div>
@@ -186,5 +193,15 @@ const CustomVideoPlayer = () => {
     </div>
   );
 };
+const mapStateToProps = (state) => ({
+  videoInfo: state.videoInfo,
+  danceSteps: state.danceSteps,
+  frameRate: state.frameRate,
+});
 
-export default CustomVideoPlayer;
+const mapDispatchToProps = {
+  setVideoInfo,
+  setDanceSteps,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomVideoPlayer);

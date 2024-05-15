@@ -1,10 +1,15 @@
-body, html {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+html {
   margin: 0;
   padding: 0;
   overflow-x: hidden; /* Prevents horizontal scrolling */
 }
 
-  /* Add this in your main CSS file */
+/* Add this in your main CSS file */
 .content-area {
   height: calc(100vh - 64px); /* Assuming navbar is 64px tall */
   overflow: hidden; /* Prevents unwanted scrollbars */

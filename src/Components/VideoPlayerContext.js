@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef } from 'react';
+import React, { createContext, useContext, useRef } from "react";
 
 export const VideoPlayerContext = createContext({
   getCurrentTime: () => 0,
