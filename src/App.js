@@ -6,19 +6,16 @@ import Keyframes from "./Components/Keyframes";
 import ReviewPage from "./Components/ReviewPage"; // Assuming you create this component
 import { PlayerContext } from "./Components/PlayerContext";
 import Navbar from "./Components/Navbar";
-import { initializeApp } from "firebase/app";
-import "firebase/auth";
-import { firebaseConfig } from "./firebaseConfig";
 import ".//App.css";
-
-const firebaseApp = initializeApp(firebaseConfig);
 
 const App = () => {
   const playerRef = useRef(null);
 
   return (
     <Router>
-      <Navbar className="navbar" />
+      <div className="container mx-auto">
+        <Navbar />
+      </div>
       <PlayerContext.Provider value={{ playerRef }}>
         <Routes>
           <Route
