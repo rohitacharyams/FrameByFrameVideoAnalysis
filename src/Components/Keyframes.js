@@ -6,6 +6,7 @@ import { useVideoPlayer } from "./VideoPlayerContext";
 import { usePlayer } from "./PlayerContext";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import { useAuth } from "../firebase/authContext";
 import {
   currentFrameAtom,
   keyframesAtom,
@@ -29,6 +30,7 @@ const Keyframes = () => {
   const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
   const [videoState, setVideoState] = useRecoilState(videoStateAtom);
   const [danceSteps, setDanceSteps] = useRecoilState(danceStepsAtom);
+  const { isLoggedIn } = useAuth();
 
   const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useState({
     keyFrameInFrameNmber: currentFrame,
@@ -41,9 +43,15 @@ const Keyframes = () => {
 
   const { playerRef } = usePlayer();
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
+
   const handleAddKeyframeIn = () => {
     const frameNumber = Math.floor(
-      playerRef.current.getCurrentTime() * frameRate
+      playerRef?.current?.getCurrentTime() * frameRate
     );
     if (KeyFrameTypeNumber.keyFrameOutFrameNmber === currentFrame) {
       console.log(
@@ -71,7 +79,7 @@ const Keyframes = () => {
 
   const handleAddKeyframeOut = () => {
     const frameNumber = Math.floor(
-      playerRef.current.getCurrentTime() * frameRate
+      playerRef?.current?.getCurrentTime() * frameRate
     );
     if (KeyFrameTypeNumber.keyFrameInFrameNmber === frameNumber) {
       console.log(

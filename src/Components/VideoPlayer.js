@@ -91,7 +91,7 @@ const VideoPlayer = () => {
 
   const handleNextFrame = () => {
     playerRef.current.seekTo(
-      playerRef.current.getCurrentTime() + numOfFramesToSkip / frameRate,
+      playerRef.current?.getCurrentTime() + numOfFramesToSkip / frameRate,
       "seconds"
     );
     setCurrentFrame((prevFrame) => prevFrame + numOfFramesToSkip);
@@ -99,7 +99,7 @@ const VideoPlayer = () => {
 
   const handlePrevFrame = () => {
     playerRef.current.seekTo(
-      playerRef.current.getCurrentTime() - numOfFramesToSkip / frameRate,
+      playerRef.current?.getCurrentTime() - numOfFramesToSkip / frameRate,
       "seconds"
     );
     setCurrentFrame((prevFrame) => Math.max(0, prevFrame - numOfFramesToSkip));
@@ -185,7 +185,7 @@ const VideoPlayer = () => {
 
       const interval = setInterval(() => {
         // console.log("current time is:", playerRef.current.getCurrentTime());
-        if (playerRef.current.getCurrentTime() >= endSeconds) {
+        if (playerRef.current?.getCurrentTime() >= endSeconds) {
           setPlaying(false);
           clearInterval(interval);
         }

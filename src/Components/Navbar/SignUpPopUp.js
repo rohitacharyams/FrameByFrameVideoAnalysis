@@ -1,36 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { doSignInWithEmailAndPassword, doSignInWithGoogle } from "../firebase/auth";
 
-const LoginPopUp = ({ showPopup, onClose }) => {
-
+const SignUpPopUp = ({ showPopUp, onClose }) => {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here (e.g., send login request)
-    const response = await doSignInWithEmailAndPassword(username, password);
-    console.log("Login attempted:", response);
+    // Handle signup logic here (e.g., send signup request)
+    console.log("Sign up attempted:", username, email, password);
     onClose(); // Close the popup after submit
   };
-
-  const handleGoogleSignIn = async () => {
-    // Handle Google sign in logic here
-    const response = await doSignInWithGoogle();
-    console.log("Google Sign In attempted:", response);
-    onClose(); // Close the popup after submit
-  }
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
       // Check if the click is outside of the popup
-      if (showPopup && !e.target.closest(".bg-white")) {
+      if (showPopUp && !e.target.closest(".bg-white")) {
         onClose(); // Close the popup
       }
     };
 
     // Add event listener when the popup is shown
-    if (showPopup) {
+    if (showPopUp) {
       document.body.addEventListener("click", handleOutsideClick);
     }
 
@@ -38,17 +29,17 @@ const LoginPopUp = ({ showPopup, onClose }) => {
     return () => {
       document.body.removeEventListener("click", handleOutsideClick);
     };
-  }, [showPopup, onClose]);
+  }, [showPopUp, onClose]);
 
   return (
     <div
       className={`fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50 transition duration-300 ease-in-out ${
-        showPopup
+        showPopUp
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
       }`}
     >
-      <div className="bg-white rounded-lg p-8 shadow-md relative w-96 h-96">
+      <div className="bg-white rounded-lg p-8 shadow-md relative w-96">
         <button
           type="button"
           onClick={onClose}
@@ -69,7 +60,7 @@ const LoginPopUp = ({ showPopup, onClose }) => {
             />
           </svg>
         </button>
-        <h2 className="text-2xl font-bold mb-6">Login</h2>
+        <h2 className="text-2xl font-bold mb-6">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label
@@ -87,6 +78,18 @@ const LoginPopUp = ({ showPopup, onClose }) => {
             />
           </div>
           <div className="mb-6">
+            <label htmlFor="email" className="block text-sm font-medium mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="shadow-sm border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="mb-6">
             <label
               htmlFor="password"
               className="block text-sm font-medium mb-2"
@@ -101,30 +104,24 @@ const LoginPopUp = ({ showPopup, onClose }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex">
             <button
               type="submit"
-              className="bg-indigo-500 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 w-1/2 mr-2"
+              className="bg-indigo-500 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 w-full mr-2"
             >
-              Login
+              Sign Up
             </button>
             <button
               type="button"
-              onClick={handleGoogleSignIn}
-              className="bg-red-600 text-white hover:bg-red-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-red-500 focus:ring-opacity-50 w-1/2 ml-2"
+              className="bg-red-600 text-white hover:bg-red-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-red-500 focus:ring-opacity-50 w-full ml-2"
             >
-              Google Sign In
+              Google Sign Up
             </button>
           </div>
         </form>
-        <div
-          className="text-sm text-gray-500 hover:text-gray-700 mt-6 block"
-        >
-          Forgot Password?
-        </div>
       </div>
     </div>
   );
 };
 
-export default LoginPopUp;
+export default SignUpPopUp;

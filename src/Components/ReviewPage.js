@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./Navbar"; // Your Navbar component
+import Navbar from "./Navbar/Navbar"; // Your Navbar component
 import CustomVideoPlayer from "./CustomVideoPlayer";
 import "./ReviewPage.css"; // Make sure to import the CSS
 
