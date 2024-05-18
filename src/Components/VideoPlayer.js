@@ -214,21 +214,10 @@ const VideoPlayer = () => {
 
   return (
     <VideoPlayerContext.Provider value={{ getCurrentTime }}>
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          height: "450px",
-          position: "relative",
-        }}
-      >
+      <div className="flex flex-col h-450 relative">
         <ThemeProvider theme={theme}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <div
-              ref={playerContainerRef}
-              style={{ position: "sticky", top: 0, zIndex: 1000 }}
-            >
+          <div className="flex flex-col gap-1">
+            <div className="sticky top-0 z-10">
               <ReactPlayer
                 ref={playerRef}
                 url={videoInfo.videoUrl}
@@ -248,25 +237,33 @@ const VideoPlayer = () => {
                 }}
               />
             </div>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Button variant="contained" onClick={handlePrevFrame}>
+            <div className="flex gap-2">
+              <button
+                variant="contained"
+                onClick={handlePrevFrame}
+                className="bg-indigo-800 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 w-1/5 mr-2"
+              >
                 Previous Frame
-              </Button>
-              <Button variant="contained" onClick={handleNextFrame}>
+              </button>
+              <button
+                variant="contained"
+                onClick={handleNextFrame}
+                className="bg-indigo-800 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 w-1/5 mr-2"
+              >
                 Next Frame
-              </Button>
-            </Box>
+              </button>
+            </div>
 
-            <Typography>Current Frame: {currentFrame}</Typography>
-            <canvas
-              ref={canvasRef}
-              sx={{ width: "100%", height: "30px", mt: "20px" }}
-            ></canvas>
-          </Box>
+            <Typography className="mt-2">
+              Current Frame: {currentFrame}
+            </Typography>
+            <canvas ref={canvasRef} className="w-full h-30 mt-2"></canvas>
+          </div>
         </ThemeProvider>
       </div>
     </VideoPlayerContext.Provider>
   );
+
 };
 
 const VideoPlayerProvider = ({ children }) => {

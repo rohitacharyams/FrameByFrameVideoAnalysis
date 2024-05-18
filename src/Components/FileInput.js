@@ -64,10 +64,11 @@ const FileInput = () => {
   };
 
   return (
-    <div>
+    <div className="bg-white text-blue-900 p-4">
       <input type="file" accept="video/*" onChange={handleFileChange} />
     </div>
   );
+
 };
 
 export default FileInput;
