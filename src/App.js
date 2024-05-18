@@ -30,20 +30,16 @@ const App = () => {
             element={
               <>
                 <Navbar />
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    height: "100vh",
-                  }}
-                >
-                  <div style={{ flex: 4, position: "relative" }}>
+                <div className="flex flex-row h-screen">
+                  <div className="flex-1 relative">
                     <VideoPlayer />
+                    <div className="flex-1">
+                      <FileInput />
+                    </div>
                   </div>
-                  <div style={{ flex: 2, overflowY: "auto" }}>
+                  <div className="flex-1 overflow-y-auto">
                     <Keyframes />
                   </div>
-                  <FileInput />
                 </div>
               </>
             }
@@ -52,8 +48,7 @@ const App = () => {
             path="/review"
             element={
               <>
-                <Navbar />
-                <div className="container mx-auto">
+                <div>
                   <ReviewPage />
                 </div>
               </>

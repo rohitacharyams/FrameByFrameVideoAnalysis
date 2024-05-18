@@ -5,7 +5,7 @@ import "./ReviewPage.css"; // Make sure to import the CSS
 
 const ReviewPage = () => {
   return (
-    <div className="app-container">
+    <div >
       <div className="player-container">
         <CustomVideoPlayer /> {/* Your custom video player */}
       </div>
