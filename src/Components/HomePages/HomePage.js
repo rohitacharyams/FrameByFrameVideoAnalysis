@@ -1,6 +1,7 @@
 import { React, useEffect } from "react";
 import { useAuth } from "../../firebase/authContext";
 import { useNavigate } from "react-router-dom";
+import VideoContainer from "./VideoContainer";
 
 const HomePage = () => {
   const { isLoggedIn } = useAuth();
@@ -26,16 +27,12 @@ const HomePage = () => {
               insights and personalized lessons. Improve your moves, track your
               progress, and become a better dancer.
             </p>
-            <button className="px-6 py-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">
+            <button className="w-1/6 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition">
               Get Started
             </button>
           </div>
           <div className="lg:w-1/2 mt-12 lg:mt-0">
-            <img
-              src="https://via.placeholder.com/500"
-              alt="Dance Illustration"
-              className="w-full rounded-lg shadow-lg"
-            />
+            <VideoContainer videoId="JYSE_JfJ5yo" />
           </div>
         </div>
       </section>
