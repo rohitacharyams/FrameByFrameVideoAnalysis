@@ -8,7 +8,7 @@ function ProfileIcon() {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const menuRef = useRef(null);
   const { currentUser } = useAuth();
-  const imageUrl = currentUser?.photoURL;
+  const [imageUrl, setImageUrl] = useState(currentUser?.photoURL);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -33,6 +33,10 @@ function ProfileIcon() {
     }
     handleCloseUserMenu();
   };
+
+  useEffect(() => {
+    setImageUrl(currentUser?.photoURL);
+  }, [currentUser]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

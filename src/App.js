@@ -7,29 +7,37 @@ import ReviewPage from "./Components/ReviewPage"; // Assuming you create this co
 import { PlayerContext } from "./Components/PlayerContext";
 import Navbar from "./Components/Navbar/Navbar";
 import "./App.css";
-import HomePage from "./Components/HomePage";
+import HomePage from "./Components/HomePages/HomePage";
+import HomePageAuth from "./Components/HomePages/HomePageAuth";
 
 const App = () => {
   const playerRef = useRef(null);
 
   return (
     <Router>
+      <Navbar />
       <PlayerContext.Provider value={{ playerRef }}>
         <Routes>
           <Route
             path="/"
             element={
-              <>
-                <Navbar />
+              <div className="flex-grow overflow-y-auto">
                 <HomePage />
+              </div>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <>
+                <HomePageAuth />
               </>
             }
           />
           <Route
-            path="/VideoPlayer"
+            path="/labeling"
             element={
               <>
-                <Navbar />
                 <div className="flex flex-row h-screen">
                   <div className="flex-1 relative">
                     <VideoPlayer />
