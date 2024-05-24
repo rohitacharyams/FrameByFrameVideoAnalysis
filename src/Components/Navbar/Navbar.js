@@ -34,7 +34,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-white w-full px-4 py-2 flex justify-between">
+    <nav className="sticky top-0 z-50 bg-white w-full px-4 py-2 flex justify-between">
       <div className="flex items-center">
         <div className="text-xl font-bold text-gray-800">Dance.AI</div>
       </div>
