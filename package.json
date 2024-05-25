@@ -8,7 +8,7 @@
     "@emotion/styled": "^11.11.5",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@mui/icons-material": "^5.15.3",
-    "@mui/material": "^5.15.15",
+    "@mui/material": "^5.15.17",
     "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.1.2",
@@ -21,6 +21,7 @@
     "react": "^18.2.0",
     "react-calendar-timeline": "^0.28.0",
     "react-dom": "^18.2.0",
+    "react-modal": "^3.16.1",
     "react-player": "^2.13.0",
     "react-redux": "^9.0.2",
     "react-router-dom": "^6.22.3",
@@ -60,8 +61,15 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.24.5",
+    "@babel/preset-env": "^7.24.5",
     "autoprefixer": "^10.4.19",
+    "babel-loader": "^9.1.3",
+    "html-webpack-plugin": "^5.6.0",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
   }
 }

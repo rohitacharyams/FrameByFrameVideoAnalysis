@@ -7,6 +7,8 @@ import ReviewPage from "./Components/ReviewPage"; // Assuming you create this co
 import { PlayerContext } from "./Components/PlayerContext";
 import Navbar from "./Components/Navbar";
 import ".//App.css";
+import Reels from "./Components/Reels";
+import Upload from "./Components/Upload";
 
 const App = () => {
   const playerRef = useRef(null);
@@ -38,6 +40,8 @@ const App = () => {
             }
           />
           <Route path="/review" element={<ReviewPage />} />
+          <Route path="/reels" element={<Reels />} />
+          <Route path="/upload" element={<Upload />} />
         </Routes>
       </PlayerContext.Provider>
       <FileInput />
