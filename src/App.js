@@ -1,46 +1,69 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import FileInput from "./Components/FileInput";
 import VideoPlayer from "./Components/VideoPlayer";
 import Keyframes from "./Components/Keyframes";
 import ReviewPage from "./Components/ReviewPage"; // Assuming you create this component
 import { PlayerContext } from "./Components/PlayerContext";
-import Navbar from "./Components/Navbar";
-import ".//App.css";
+import Navbar from "./Components/Navbar/Navbar";
+import "./App.css";
+import HomePage from "./Components/HomePages/HomePage";
+import HomePageAuth from "./Components/HomePages/HomePageAuth";
 
 const App = () => {
   const playerRef = useRef(null);
 
   return (
     <Router>
-      <div className="container mx-auto">
-        <Navbar />
-      </div>
+      <Navbar />
       <PlayerContext.Provider value={{ playerRef }}>
         <Routes>
           <Route
             path="/"
             element={
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  height: "100vh",
-                }}
-              >
-                <div style={{ flex: 4, position: "relative" }}>
-                  <VideoPlayer />
-                </div>
-                <div style={{ flex: 2, overflowY: "auto" }}>
-                  <Keyframes />
-                </div>
+              <div className="flex-grow overflow-y-auto">
+                <HomePage />
               </div>
             }
           />
-          <Route path="/review" element={<ReviewPage />} />
+          <Route
+            path="/home"
+            element={
+              <>
+                <HomePageAuth />
+              </>
+            }
+          />
+          <Route
+            path="/labeling"
+            element={
+              <>
+                <div className="flex flex-row h-screen">
+                  <div className="flex-1 relative">
+                    <VideoPlayer />
+                    <div className="flex-1">
+                      <FileInput />
+                    </div>
+                  </div>
+                  <div className="flex-1 overflow-y-auto">
+                    <Keyframes />
+                  </div>
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="/review"
+            element={
+              <>
+                <div>
+                  <ReviewPage />
+                </div>
+              </>
+            }
+          />
         </Routes>
       </PlayerContext.Provider>
-      <FileInput />
     </Router>
   );
 };

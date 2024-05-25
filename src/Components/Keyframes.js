@@ -6,6 +6,7 @@ import { useVideoPlayer } from "./VideoPlayerContext";
 import { usePlayer } from "./PlayerContext";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import { useAuth } from "../firebase/authContext";
 import {
   currentFrameAtom,
   keyframesAtom,
@@ -29,6 +30,7 @@ const Keyframes = () => {
   const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
   const [videoState, setVideoState] = useRecoilState(videoStateAtom);
   const [danceSteps, setDanceSteps] = useRecoilState(danceStepsAtom);
+  const { isLoggedIn } = useAuth();
 
   const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useState({
     keyFrameInFrameNmber: currentFrame,
@@ -41,9 +43,15 @@ const Keyframes = () => {
 
   const { playerRef } = usePlayer();
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
+
   const handleAddKeyframeIn = () => {
     const frameNumber = Math.floor(
-      playerRef.current.getCurrentTime() * frameRate
+      playerRef?.current?.getCurrentTime() * frameRate
     );
     if (KeyFrameTypeNumber.keyFrameOutFrameNmber === currentFrame) {
       console.log(
@@ -71,7 +79,7 @@ const Keyframes = () => {
 
   const handleAddKeyframeOut = () => {
     const frameNumber = Math.floor(
-      playerRef.current.getCurrentTime() * frameRate
+      playerRef?.current?.getCurrentTime() * frameRate
     );
     if (KeyFrameTypeNumber.keyFrameInFrameNmber === frameNumber) {
       console.log(
@@ -140,62 +148,54 @@ const Keyframes = () => {
   // }, [playerRef]);
 
   return (
-    <Container>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={8}>
-          {/* Video Player */}
-          <Box>{/* Video Player Component */}</Box>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          {/* Dance Steps Manager */}
-          <Box>
-            <DanceStepsManager
-              danceSteps={danceSteps}
-              onPlayStep={handlePlayStep}
-            />
-          </Box>
-        </Grid>
-      </Grid>
-      <div
-        className="keyframe-buttons-container"
-        style={{
-          position: "absolute",
-          bottom: "10px",
-          left: "50%",
-          transform: "translateX(-50%)",
-        }}
-      >
-        <Box mt={2}>
+    <div className="bg-white text-blue-900 min-h-screen">
+      <div className="container mx-auto py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="col-span-1 px-5">
+            {/* Dance Steps Manager */}
+            <div className="text-black-800 rounded-lg shadow-lg flex justify-center p-4 h-96">
+              {<DanceStepsManager
+                danceSteps={danceSteps}
+                onPlayStep={handlePlayStep}
+              />}
+            </div>
+          </div>
+        </div>
+
+        {/* Keyframe Buttons Container */}
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
           {/* Keyframe Buttons */}
-          <Box display="flex" justifyContent="center">
-            <Button
-              variant="contained"
+          <div className="flex justify-center space-x-6 mt-4">
+            <button
               onClick={handleAddKeyframeIn}
               disabled={!keyframeBool.keyFrameOutActive}
+              className="bg-indigo-800 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 w-1/2 mr-2"
             >
               Add Keyframe In
-            </Button>
-            <Button
-              variant="contained"
+            </button>
+            <button
               onClick={handleAddKeyframeOut}
               disabled={!keyframeBool.keyFrameInActive}
+              className="bg-indigo-800 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 w-1/2 mr-2"
             >
               Add Keyframe Out
-            </Button>
-          </Box>
-        </Box>
+            </button>
+          </div>
 
-        <Box mt={2}>
           {/* Labelling Done Button */}
-          <Box display="flex" justifyContent="center">
-            <Button variant="contained" onClick={handleLabellingDone}>
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={handleLabellingDone}
+              className="bg-indigo-800 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 w-1/2 mr-2"
+            >
               Labelling Done
-            </Button>
-          </Box>
-        </Box>
+            </button>
+          </div>
+        </div>
       </div>
-    </Container>
+    </div>
   );
+
 };
 
 export default Keyframes;

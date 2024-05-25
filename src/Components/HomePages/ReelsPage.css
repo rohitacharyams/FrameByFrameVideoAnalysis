@@ -1,0 +1,27 @@
+/* ReelsPage.css */
+
+.video-slider {
+  overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+.video-slide {
+  display: flex; /* Use flexbox for layout */
+  transition: transform 0.5s ease-in-out; /* Define transition for transform property */
+}
+
+.slide-enter {
+  transform: translateX(100%); /* Initial state for enter transition (off-screen to the right) */
+}
+
+.slide-enter-active {
+  transform: translateX(0); /* Final state for enter transition (slide in from right) */
+}
+
+.slide-exit {
+  transform: translateX(0); /* Initial state for exit transition (current position) */
+}
+
+.slide-exit-active {
+  transform: translateX(-100%); /* Final state for exit transition (slide out to left) */
+}
+
