@@ -49,6 +49,10 @@ const VideoPlayer = () => {
   const [videoState, setVideoState] = useRecoilState(videoStateAtom);
   const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
 
+  // For videos from blob store
+  const [currentVideo, setCurrentVideo] = useState(null);
+  const [videos, setVideos] = useState([]);
+
   // const playerRef = useRef(null);
   const { playerRef } = usePlayer();
   const playerContainerRef = useRef(null);
@@ -116,6 +120,32 @@ const VideoPlayer = () => {
   const handlePlay = () => {
     setPlayerVisibility(true);
     play();
+  };
+
+  useEffect(() => {
+    // Fetch videos from the backend
+    fetch("http://localhost:51040/api/videosFromStorage")
+    .then(response => response.json())
+    .then(data => {
+      if (data.url) {
+        setCurrentVideo(data.url);
+      } else {
+        console.error("Error fetching video:", data.error);
+      }
+    })
+    .catch(error => console.error("Error fetching video:", error));
+  }, []);
+
+  const handleNextVideo = () => {
+    const currentIndex = videos.indexOf(currentVideo);
+    const nextIndex = (currentIndex + 1) % videos.length;
+    setCurrentVideo(videos[nextIndex]);
+  };
+
+  const handlePreviousVideo = () => {
+    const currentIndex = videos.indexOf(currentVideo);
+    const previousIndex = (currentIndex - 1 + videos.length) % videos.length;
+    setCurrentVideo(videos[previousIndex]);
   };
 
   useEffect(() => {
@@ -222,7 +252,7 @@ const VideoPlayer = () => {
             <div className="sticky top-0 z-10">
               <ReactPlayer
                 ref={playerRef}
-                url={videoInfo.videoUrl}
+                url={currentVideo}
                 playing={playing}
                 controls
                 playbackRate={playbackRate}
@@ -255,6 +285,17 @@ const VideoPlayer = () => {
                 Next Frame
               </button>
             </div>
+            <Box>
+              <Box sx={{ display: "flex", gap: 2 }}>
+              <Button variant="contained" onClick={handlePreviousVideo}>
+                Previous Video
+              </Button>
+              <Button variant="contained" onClick={handleNextVideo}>
+                Next Video
+              </Button>
+              </Box>
+              <Typography>Current Video: {currentVideo}</Typography>
+            </Box>
 
             <Typography className="mt-2">
               Current Frame: {currentFrame}
