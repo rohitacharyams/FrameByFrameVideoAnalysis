@@ -138,7 +138,7 @@ const Keyframes = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Keyframes saved successfully:", data);
-        navigate("/review");
+        setDanceSteps([]); // Clear the dance steps
       })
       .catch((error) => console.error("Error saving keyframes:", error));
   };
@@ -154,10 +154,13 @@ const Keyframes = () => {
           <div className="col-span-1 px-5">
             {/* Dance Steps Manager */}
             <div className="text-black-800 rounded-lg shadow-lg flex justify-center p-4 h-96">
-              {<DanceStepsManager
-                danceSteps={danceSteps}
-                onPlayStep={handlePlayStep}
-              />}
+              {
+                <DanceStepsManager
+                  danceSteps={danceSteps}
+                  onPlayStep={handlePlayStep}
+                  setDanceSteps={setDanceSteps}
+                />
+              }
             </div>
           </div>
         </div>
@@ -195,7 +198,6 @@ const Keyframes = () => {
       </div>
     </div>
   );
-
 };
 
 export default Keyframes;
