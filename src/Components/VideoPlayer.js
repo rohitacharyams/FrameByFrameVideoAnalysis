@@ -152,6 +152,7 @@ const VideoPlayer = () => {
       const data = await response.json();
       if (data.url) {
         await fetchVideo(data.url);
+        setVideoFilename(data.videoFilename);
       } else {
         console.error('Error fetching video:', data.error);
       }

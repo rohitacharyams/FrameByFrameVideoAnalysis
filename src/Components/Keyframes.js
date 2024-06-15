@@ -127,7 +127,7 @@ const Keyframes = () => {
   };
 
   const handleLabellingDone = () => {
-    console.log(videoFilename);
+    console.log("The name of  video file is :",videoFilename, "And the key frames are :", keyframes);
     fetch("http://localhost:51040/save_keyframes", {
       method: "POST",
       headers: {
