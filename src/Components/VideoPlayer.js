@@ -53,11 +53,23 @@ const VideoPlayer = () => {
   const [currentVideo, setCurrentVideo] = useState(null);
   const [videos, setVideos] = useState([]);
 
+  // For storing video in browser cache
+  const [loaded, setLoaded] = useState(false);
+
   // const playerRef = useRef(null);
   const { playerRef } = usePlayer();
   const playerContainerRef = useRef(null);
   const canvasRef = useRef(null);
   const [playbackRate, setPlaybackRate] = useState(1);
+  
+  // For video timeline 
+  const [frames, setFrames] = useState([]);
+  const [frameCount, setFrameCount] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(1);
+
+  // for fetching video from temp store
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [isPlayerVisible, setPlayerVisibility] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -83,9 +95,19 @@ const VideoPlayer = () => {
     // Dispatch action to update current frame in the Redux store
   };
 
-  const handleSeek = (e) => {
-    setCurrentFrame(Math.floor(e.playedSeconds * frameRate));
-    console.log("value of current frame is", currentFrame);
+  const handleSeek = (index) => {
+    const seekTo = (index / frameCount) * playerRef.current.getDuration();
+    playerRef.current.seekTo(seekTo, 'seconds');
+    setPlaying(true);
+  };
+
+  const handleZoomChange = (event, newValue) => {
+    setZoomLevel(newValue);
+  };
+
+  const getVisibleFrames = () => {
+    const step = Math.max(1, Math.floor(frameCount / (100 * zoomLevel)));
+    return frames.filter((_, index) => index % step === 0);
   };
 
   const handleNumberOfFrames = (e) => {
@@ -122,30 +144,60 @@ const VideoPlayer = () => {
     play();
   };
 
-  useEffect(() => {
-    // Fetch videos from the backend
-    fetch("http://localhost:51040/api/videosFromStorage")
-    .then(response => response.json())
-    .then(data => {
+  const fetchRandomVideo = async () => {
+    console.log("Handling next video heyy");
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:51040/api/videosFromStorage');
+      const data = await response.json();
       if (data.url) {
-        setCurrentVideo(data.url);
+        await fetchVideo(data.url);
       } else {
-        console.error("Error fetching video:", data.error);
+        console.error('Error fetching video:', data.error);
       }
-    })
-    .catch(error => console.error("Error fetching video:", error));
-  }, []);
+    } catch (error) {
+      console.error('Error fetching video:', error);
+    }
+    setLoading(false);
+  };
+
+  const fetchVideo = async (url) => {
+    try {
+      const response = await fetch('http://localhost:51040/api/fetch_video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json();
+      if (data.message === 'Video fetched') {
+        setVideoUrl(data.videoUrl);
+        console.log("the video url is : ", data.videoUrl);
+      } else {
+        console.error('Error fetching video:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching video:', error);
+    }
+  };
+
+  // useEffect(() => {
+  //   fetchRandomVideo();
+  // }, []);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.oncanplaythrough = () => {
+        setLoaded(true);
+      };
+    }
+  }, [currentVideo]);
 
   const handleNextVideo = () => {
-    const currentIndex = videos.indexOf(currentVideo);
-    const nextIndex = (currentIndex + 1) % videos.length;
-    setCurrentVideo(videos[nextIndex]);
+    fetchRandomVideo();
   };
 
   const handlePreviousVideo = () => {
-    const currentIndex = videos.indexOf(currentVideo);
-    const previousIndex = (currentIndex - 1 + videos.length) % videos.length;
-    setCurrentVideo(videos[previousIndex]);
+    // fetchRandomVideo();
   };
 
   useEffect(() => {
@@ -231,6 +283,13 @@ const VideoPlayer = () => {
   }, [stepFrames, playbackRate]);
 
   useEffect(() => {
+    if (currentVideo) {
+      // Clear previous video from cache when fetching a new one
+      fetch('http://localhost:51040/api/clear_cache', { method: 'POST' });
+    }
+  }, [currentVideo]);
+
+  useEffect(() => {
     console.log("current frame in this component is :", currentFrame);
 
     if (playerRef.current && videoState.frame === 1) {
@@ -252,13 +311,14 @@ const VideoPlayer = () => {
             <div className="sticky top-0 z-10">
               <ReactPlayer
                 ref={playerRef}
-                url={currentVideo}
+                url={videoUrl}
                 playing={playing}
-                controls
+                controls = {true}
                 playbackRate={playbackRate}
                 width="100%"
                 height="400px"
                 onProgress={handleProgress}
+                preload="auto"
                 config={{
                   file: {
                     forceVideo: true,
@@ -294,7 +354,6 @@ const VideoPlayer = () => {
                 Next Video
               </Button>
               </Box>
-              <Typography>Current Video: {currentVideo}</Typography>
             </Box>
 
             <Typography className="mt-2">
