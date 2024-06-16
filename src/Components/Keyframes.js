@@ -53,7 +53,8 @@ const Keyframes = () => {
     const frameNumber = Math.floor(
       playerRef?.current?.getCurrentTime() * frameRate
     );
-    if (KeyFrameTypeNumber.keyFrameOutFrameNmber === currentFrame) {
+    if (KeyFrameTypeNumber.keyFrameOutFrameNmber > currentFrame) {
+      console.log("The frames are :", KeyFrameTypeNumber, currentFrame);
       console.log(
         "please increase the frame number to start a new keyFrame as one already closed on this one"
       );
@@ -81,6 +82,7 @@ const Keyframes = () => {
     const frameNumber = Math.floor(
       playerRef?.current?.getCurrentTime() * frameRate
     );
+    console.log("The frames are in out are:", KeyFrameTypeNumber, currentFrame);
     if (KeyFrameTypeNumber.keyFrameInFrameNmber === frameNumber) {
       console.log(
         "please increase the frame number to start a new keyFrame as one already closed on this one"
@@ -159,6 +161,8 @@ const Keyframes = () => {
                   danceSteps={danceSteps}
                   onPlayStep={handlePlayStep}
                   setDanceSteps={setDanceSteps}
+                  KeyFrameTypeNumber={KeyFrameTypeNumber}
+                  setKeyFrameTypeNumber={setKeyFrameTypeNumber}
                 />
               }
             </div>

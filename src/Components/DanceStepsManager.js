@@ -3,11 +3,17 @@ import React from "react";
 import { Button } from "@mui/material";
 import { usePlayer } from "./PlayerContext";
 
-const DanceStepsManager = ({ danceSteps, onPlayStep, setDanceSteps }) => {
+const DanceStepsManager = ({ danceSteps, onPlayStep, setDanceSteps, KeyFrameTypeNumber, setKeyFrameTypeNumber }) => {
   const { playerRef } = usePlayer();
 
   const handleDeleteLastStep = () => {
     setDanceSteps((prevSteps) => prevSteps.slice(0, -1));
+    // setKeyFrameTypeNumber((prevSteps) => prevSteps.slice(0, -1));
+    setKeyFrameTypeNumber({
+      keyFrameInFrameNmber: -1,
+      keyFrameOutFrameNmber: -1,
+    });
+    console.log("This was called", danceSteps, KeyFrameTypeNumber);
   };
 
   return (
