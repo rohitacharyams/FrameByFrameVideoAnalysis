@@ -24,7 +24,7 @@ const numOfFramesToSkipAtom = atom({
 
 const currentFrameAtom = atom({
   key: "currentFrame",
-  default: 1,
+  default: 0,
 });
 
 const keyframesAtom = atom({
@@ -52,7 +52,7 @@ const thumbnailUrlAtom = atom({
 
 const stepFramesAtom = atom({
   key: "stepFrames",
-  default: { startFrame: 1, endFrame: 1 },
+  default: { startFrame: -1, endFrame: -1 },
 });
 
 const videoStateAtom = atom({
@@ -62,7 +62,7 @@ const videoStateAtom = atom({
 
 const updateDisplayedStepAtom = atom({
   key: "updateDisplayedStep",
-  default: { frameNumber: 1 },
+  default: { frameNumber: 0 },
 });
 
 const danceStepsAtom = atom({

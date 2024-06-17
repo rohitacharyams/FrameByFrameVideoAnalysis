@@ -53,6 +53,7 @@ const FileInput = () => {
             })
             .then((data) => {
               const frameRate = parseInt(data.frameRate);
+              console.log("Dude the frame rate came out to be :", frameRate);
               setFrameRate(frameRate);
             })
             .catch((error) =>

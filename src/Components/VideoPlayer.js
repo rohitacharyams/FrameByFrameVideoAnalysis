@@ -144,6 +144,7 @@ const VideoPlayer = () => {
     play();
   };
 
+
   const fetchRandomVideo = async () => {
     console.log("Handling next video heyy");
     setLoading(true);
@@ -153,6 +154,27 @@ const VideoPlayer = () => {
       if (data.url) {
         await fetchVideo(data.url);
         setVideoFilename(data.videoFilename);
+        fetch(`http://localhost:51040/get_frame_info`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ videoFilename: data.videoFilename }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Failed to get frame info");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              const frameRate = parseInt(data.frameRate);
+              console.log("Dude the frame rate came out to be :", frameRate);
+              setFrameRate(frameRate);
+            })
+            .catch((error) =>
+              console.error("Error getting frame rate:", error)
+            );
       } else {
         console.error('Error fetching video:', data.error);
       }
