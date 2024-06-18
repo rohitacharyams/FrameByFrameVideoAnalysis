@@ -27,6 +27,14 @@ const currentFrameAtom = atom({
   default: 0,
 });
 
+const KeyFrameTypeNumberAtom = atom({
+  key: "KeyFrameTypeNumber",
+  default: {
+    keyFrameInFrameNmber: -1,
+    keyFrameOutFrameNmber: -1,
+  },
+});
+
 const keyframesAtom = atom({
   key: "keyframes",
   default: [],
@@ -84,4 +92,5 @@ export {
   videoStateAtom,
   updateDisplayedStepAtom,
   danceStepsAtom,
+  KeyFrameTypeNumberAtom,
 };
