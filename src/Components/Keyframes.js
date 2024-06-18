@@ -16,9 +16,8 @@ import {
   stepFramesAtom,
   videoStateAtom,
   danceStepsAtom,
+  KeyFrameTypeNumberAtom,
 } from "../Recoil/atoms";
-
-import { Button, Typography, Container, Grid, Box } from "@mui/material";
 
 const Keyframes = () => {
   // Recoil states :
@@ -30,12 +29,8 @@ const Keyframes = () => {
   const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
   const [videoState, setVideoState] = useRecoilState(videoStateAtom);
   const [danceSteps, setDanceSteps] = useRecoilState(danceStepsAtom);
+  const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useRecoilState(KeyFrameTypeNumberAtom);
   const { isLoggedIn } = useAuth();
-
-  const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useState({
-    keyFrameInFrameNmber: currentFrame,
-    keyFrameOutFrameNmber: currentFrame,
-  });
 
   const [playing, setPlaying] = useState(false); // Define the playing state
 
@@ -141,6 +136,10 @@ const Keyframes = () => {
       .then((data) => {
         console.log("Keyframes saved successfully:", data);
         setDanceSteps([]); // Clear the dance steps
+        setKeyFrameTypeNumber({
+          keyFrameInFrameNmber: -1,
+          keyFrameOutFrameNmber: -1,
+        });
       })
       .catch((error) => console.error("Error saving keyframes:", error));
   };
