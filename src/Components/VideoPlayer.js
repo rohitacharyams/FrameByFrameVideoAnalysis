@@ -91,7 +91,6 @@ const VideoPlayer = () => {
     // Assuming frameRate is frames per second, and state.playedSeconds gives the current playback time in seconds
     const frameNumber = Math.floor(state.playedSeconds * frameRate);
     setCurrentFrame(frameNumber);
-    console.log("value of current frame is", currentFrame, frameNumber);
     // Dispatch action to update current frame in the Redux store
   };
 
