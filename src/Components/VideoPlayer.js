@@ -24,6 +24,7 @@ import {
   stepFramesAtom,
   videoStateAtom,
   videoFilenameAtom,
+  KeyFrameTypeNumberAtom,
 } from "../Recoil/atoms";
 
 const theme = createTheme({
@@ -48,6 +49,7 @@ const VideoPlayer = () => {
   const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
   const [videoState, setVideoState] = useRecoilState(videoStateAtom);
   const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
+  const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useRecoilState(KeyFrameTypeNumberAtom);
 
   // For videos from blob store
   const [currentVideo, setCurrentVideo] = useState(null);
@@ -215,6 +217,10 @@ const VideoPlayer = () => {
   }, [currentVideo]);
 
   const handleNextVideo = () => {
+    setKeyFrameTypeNumber({
+      keyFrameInFrameNmber: -1,
+      keyFrameOutFrameNmber: -1,
+    });
     fetchRandomVideo();
   };
 
