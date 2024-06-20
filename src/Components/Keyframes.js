@@ -124,18 +124,19 @@ const Keyframes = () => {
   };
 
   const handleLabellingDone = () => {
-    console.log("The name of  video file is :",videoFilename, "And the key frames are :", keyframes);
+    console.log("The name of  video file is :",videoFilename, "And the dance steps are :", danceSteps);
     fetch("http://localhost:51040/save_keyframes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ keyframes, video_filename: videoFilename }),
+      body: JSON.stringify({ danceSteps, video_filename: videoFilename }),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("Keyframes saved successfully:", data);
         setDanceSteps([]); // Clear the dance steps
+        setKeyframes([])
         setKeyFrameTypeNumber({
           keyFrameInFrameNmber: -1,
           keyFrameOutFrameNmber: -1,

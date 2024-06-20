@@ -170,7 +170,8 @@ const VideoPlayer = () => {
             })
             .then((data) => {
               const frameRate = parseInt(data.frameRate);
-              console.log("Dude the frame rate came out to be :", frameRate);
+              console.log("Dude the frame rate came out to be :", frameRate, "And the name of video is :", data.videoFilename);
+              
               setFrameRate(frameRate);
             })
             .catch((error) =>
@@ -309,13 +310,6 @@ const VideoPlayer = () => {
   useEffect(() => {
     playStepFrames(stepFrames);
   }, [stepFrames, playbackRate]);
-
-  useEffect(() => {
-    if (currentVideo) {
-      // Clear previous video from cache when fetching a new one
-      fetch('http://localhost:51040/api/clear_cache', { method: 'POST' });
-    }
-  }, [currentVideo]);
 
   useEffect(() => {
     console.log("current frame in this component is :", currentFrame);
