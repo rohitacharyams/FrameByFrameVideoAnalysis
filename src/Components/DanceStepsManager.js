@@ -20,7 +20,7 @@ const DanceStepsManager = ({ danceSteps, onPlayStep, setDanceSteps, KeyFrameType
     <div>
       <h3>Dance Steps:</h3>
       {danceSteps.map((step, index) => (
-        <div className="flex" key={index}>
+        <div className="flex" key={index} style={{ marginLeft: '80px' }}>
           <Button onClick={() => onPlayStep(step)}>{`Step ${
             index + 1
           }`}</Button>

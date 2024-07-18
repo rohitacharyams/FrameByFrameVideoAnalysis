@@ -196,7 +196,7 @@ const VideoPlayer = () => {
       const data = await response.json();
       if (data.message === 'Video fetched') {
         setVideoUrl(data.videoUrl);
-        console.log("the video url is : ", data.videoUrl);
+        console.log("the video url is : ", videoUrl);
       } else {
         console.error('Error fetching video:', data.error);
       }
@@ -322,8 +322,6 @@ const VideoPlayer = () => {
       playerRef.current.getInternalPlayer().pause(); // Pause the video
     }
   }, [videoState]);
-
-  const url = "https://www.youtube.com/watch?v=24sm4XYi4MY";
 
   return (
     <VideoPlayerContext.Provider value={{ getCurrentTime }}>

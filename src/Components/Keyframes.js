@@ -32,6 +32,8 @@ const Keyframes = () => {
   const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useRecoilState(KeyFrameTypeNumberAtom);
   const { isLoggedIn } = useAuth();
 
+  const [probableEndFrames, setProbableEndFrames] = useState();
+
   const [playing, setPlaying] = useState(false); // Define the playing state
 
   const navigate = useNavigate();
@@ -70,8 +72,33 @@ const Keyframes = () => {
     setKeyframeBool({ keyFrameInActive: true, keyFrameOutActive: false });
 
     console.log("Setting video state to pause, current frame", currentFrame);
-    setVideoState({ currentState: true, frame: 1 });
+    // setVideoState({ currentState: true, frame: 1 });
+
+    fetchProbableEndFrames(currentFrame);
+
   };
+
+  const fetchProbableEndFrames = async (startFrame) => {
+    const response = await fetch('http://localhost:51040/api/get_probable_end_frames', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            videoFilename: videoFilename,
+            startFrame: startFrame,
+            frameRate: frameRate
+        }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+        console.log("The end frames prediction are : ", data);
+        setProbableEndFrames(data.probableEndFrames);
+    } else {
+        console.error("Failed to fetch probable end frames", data);
+    }
+};
 
   const handleAddKeyframeOut = () => {
     const frameNumber = Math.floor(
@@ -172,7 +199,7 @@ const Keyframes = () => {
         {/* Keyframe Buttons Container */}
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
           {/* Keyframe Buttons */}
-          <div className="flex justify-center space-x-6 mt-4">
+          <div className="flex justify-center space-x-6 mt-4" style={{ marginRight: '350px' }}>
             <button
               onClick={handleAddKeyframeIn}
               disabled={!keyframeBool.keyFrameOutActive}
@@ -190,7 +217,7 @@ const Keyframes = () => {
           </div>
 
           {/* Labelling Done Button */}
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-4" style={{ marginRight: '350px' }}>
             <button
               onClick={handleLabellingDone}
               className="bg-indigo-800 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 w-1/2 mr-2"
