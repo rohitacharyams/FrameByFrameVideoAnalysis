@@ -316,7 +316,7 @@ const VideoPlayer = () => {
 
     if (playerRef.current && videoState.frame === 1) {
       console.log("Playing the video");
-      playerRef.current.getInternalPlayer().play(); // Pause the video
+      playerRef.current.getInternalPlayer().play(); // Play the video
     } else if (playerRef.current && videoState.frame === 2) {
       console.log("Pausing the video");
       playerRef.current.getInternalPlayer().pause(); // Pause the video
