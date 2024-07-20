@@ -107,7 +107,8 @@ const Keyframes = () => {
       Object.values(data.probableEndFrames).forEach((frames) => {
         frames.forEach((frame) => uniqueFrames.add(frame));
       });
-      setProbableEndFrames([...uniqueFrames]);
+      const sortedUniqueFrames = [...uniqueFrames].sort((a, b) => a - b);
+      setProbableEndFrames(sortedUniqueFrames);
     } else {
       console.error("Failed to fetch probable end frames", data);
     }
@@ -160,6 +161,7 @@ const Keyframes = () => {
     setKeyframes([...keyframes, { frame: frameNumber, type: "out" }]);
     setShowComponentPopup(true); // Show pop-up for component selection
     setKeyframeBool({ keyFrameInActive: false, keyFrameOutActive: true });
+    setProbableEndFrames([]); // Clear the probable end frames
     // const newStep = {
     //   keyFrameIn: KeyFrameTypeNumber.keyFrameInFrameNmber,
     //   keyFrameOut: frameNumber,
@@ -195,6 +197,7 @@ const Keyframes = () => {
     setDanceSteps([...danceSteps, newStep]);
     setShowComponentPopup(false);
     setSelectedComponents([]);
+    setProbableEndFrames([]); // Clear the probable end frames
   };
 
   const handlePlayStep = (step) => {
