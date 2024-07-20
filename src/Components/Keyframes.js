@@ -43,7 +43,7 @@ const Keyframes = () => {
   const { playerRef } = usePlayer();
 
   const [selectedComponents, setSelectedComponents] = useState([]);
-  const [showComponentButtons, setShowComponentButtons] = useState(false);
+  const [showComponentPopup, setShowComponentPopup] = useState(false);
 
 
   useEffect(() => {
@@ -158,15 +158,16 @@ const Keyframes = () => {
       keyFrameOutFrameNmber: frameNumber,
     });
     setKeyframes([...keyframes, { frame: frameNumber, type: "out" }]);
+    setShowComponentPopup(true); // Show pop-up for component selection
     setKeyframeBool({ keyFrameInActive: false, keyFrameOutActive: true });
-    const newStep = {
-      keyFrameIn: KeyFrameTypeNumber.keyFrameInFrameNmber,
-      keyFrameOut: frameNumber,
-      newStepId: danceSteps.length,
-      components: selectedComponents,
-    };
-    setDanceSteps([...danceSteps, newStep]);
-    setShowComponentButtons(true);
+    // const newStep = {
+    //   keyFrameIn: KeyFrameTypeNumber.keyFrameInFrameNmber,
+    //   keyFrameOut: frameNumber,
+    //   newStepId: danceSteps.length,
+    //   components: selectedComponents,
+    // };
+    // setDanceSteps([...danceSteps, newStep]);
+    // setShowComponentButtons(true);
 
     // I need something to first pause the video for a sec and then
     console.log("Setting video state to pause, current frame", frameNumber);
@@ -185,14 +186,14 @@ const Keyframes = () => {
   };
   
   const saveComponentSelection = () => {
-    const updatedSteps = danceSteps.map((step) => {
-      if (step.newStepId === danceSteps.length - 1) {
-        return { ...step, components: selectedComponents };
-      }
-      return step;
-    });
-    setDanceSteps(updatedSteps);
-    setShowComponentButtons(false);
+    const newStep = {
+      keyFrameIn: KeyFrameTypeNumber.keyFrameInFrameNmber,
+      keyFrameOut: KeyFrameTypeNumber.keyFrameOutFrameNmber,
+      newStepId: danceSteps.length,
+      components: selectedComponents,
+    };
+    setDanceSteps([...danceSteps, newStep]);
+    setShowComponentPopup(false);
     setSelectedComponents([]);
   };
 
@@ -269,28 +270,33 @@ const Keyframes = () => {
           </div>
         </div>
 
-        {/* Component Selection Buttons */}
-      {showComponentButtons && (
-        <div className="flex flex-col items-center space-y-4 mt-4">
-          {["vocals", "drums", "bass", "other", "guitar", "piano"].map((component) => (
-            <button
-              key={component}
-              onClick={() => handleComponentSelection(component)}
-              className={`${
-                selectedComponents.includes(component) ? "bg-blue-500" : "bg-gray-500"
-              } text-white hover:bg-gray-400 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50`}
-            >
-              {component}
-            </button>
-          ))}
-          <button
-            onClick={saveComponentSelection}
-            className="bg-indigo-800 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-          >
-            Save Component Selection
-          </button>
-        </div>
-      )}
+        {/* Component Selection Pop-Up */}
+        {showComponentPopup && (
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg max-w-md w-full">
+              <h2 className="text-xl mb-4">Select Influencing Components</h2>
+              <div className="flex flex-col items-center space-y-4">
+                {["vocals", "drums", "bass", "other", "guitar", "piano"].map((component) => (
+                  <button
+                    key={component}
+                    onClick={() => handleComponentSelection(component)}
+                    className={`${
+                      selectedComponents.includes(component) ? "bg-blue-500" : "bg-gray-500"
+                    } text-white hover:bg-gray-400 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50`}
+                  >
+                    {component}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={saveComponentSelection}
+                className="mt-4 bg-indigo-800 text-white hover:bg-indigo-700 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+              >
+                Save Selection
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Keyframe Buttons Container */}
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">

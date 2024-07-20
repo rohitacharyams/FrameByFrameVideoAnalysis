@@ -331,7 +331,7 @@ const VideoPlayer = () => {
             <div className="sticky top-0 z-10">
               <ReactPlayer
                 ref={playerRef}
-                url={videoUrl}
+                url={videoInfo.videoUrl ? videoInfo.videoUrl : videoUrl}
                 playing={playing}
                 controls = {true}
                 playbackRate={playbackRate}
