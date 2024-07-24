@@ -39,6 +39,9 @@ const CustomVideoPlayer = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [mirrored, setMirrored] = useState(false);
 
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const toggleSteps = () => {
     setShowSteps(!showSteps); // Toggle visibility of steps
   };
@@ -49,6 +52,69 @@ const CustomVideoPlayer = () => {
 
   const toggleMirroring = () => {
     setMirrored(!mirrored); // Toggle mirroring state
+  };
+
+  const fetchRandomVideo = async () => {
+    console.log("Handling next video heyy");
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:51040/api/videosFromStorageLabelled');
+      const data = await response.json();
+      if (data.url) {
+        await fetchVideo(data.url);
+        console.log("The data is :", data);
+        setVideoFilename(data.videoFilename);
+        setDanceSteps(data.steps);
+        fetch(`http://localhost:51040/get_frame_info`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ videoFilename: data.videoFilename }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Failed to get frame info");
+              }
+              return response.json();
+            })
+            .then((frameData) => {
+              const frameRate = parseInt(frameData.frameRate);
+              console.log("Dude the frame rate came out to be :", frameRate, "And the name of video is :", frameData.videoFilename);
+              
+              setFrameRate(frameRate);
+              
+              console.log("The dance steps values are : ", danceSteps);
+            })
+            .catch((error) =>
+              console.error("Error getting frame rate:", error)
+            );
+      } else {
+        console.error('Error fetching video:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching video:', error);
+    }
+    setLoading(false);
+  };
+
+  const fetchVideo = async (url) => {
+    try {
+      const response = await fetch('http://localhost:51040/api/fetch_video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json();
+      if (data.message === 'Video fetched') {
+        setVideoUrl(data.videoUrl);
+        console.log("the video url is : ", videoUrl);
+      } else {
+        console.error('Error fetching video:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching video:', error);
+    }
   };
 
   useEffect(() => {
@@ -151,7 +217,7 @@ const CustomVideoPlayer = () => {
     <div className="player-wrapper">
       <ReactPlayer
         ref={playerRef}
-        url={videoInfo.videoUrl}
+        url={videoUrl}
         playing={playing}
         controls={true}
         width="100%"
@@ -165,6 +231,7 @@ const CustomVideoPlayer = () => {
         <button onClick={toggleMirroring}>
           {mirrored ? "Unmirror" : "Mirror"}
         </button>
+        <button onClick={fetchRandomVideo}>Fetch New Video</button> 
         {/* Additional control buttons */}
       </div>
       <div className="right-controls">

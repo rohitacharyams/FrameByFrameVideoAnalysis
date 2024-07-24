@@ -5,7 +5,7 @@ import { useAuth } from "../../firebase/authContext";
 import ProfileIcon from "./ProfileIcon";
 import { useNavigate } from "react-router-dom";
 
-const pages = ["Home", "Labeling", "Products", "Pricing", "Contact"];
+const pages = ["Home", "Labeling", "Review", "Pricing", "Contact"];
 
 function Navbar() {
   const [showLoginPopUp, setShowLoginPopUp] = useState(false);
