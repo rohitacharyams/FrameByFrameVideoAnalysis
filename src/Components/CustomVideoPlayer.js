@@ -13,7 +13,6 @@ import {
 } from "../Recoil/atoms";
 
 import ".//CustomControls.css";
-import DanceStepsManager from "./DanceStepsManager";
 
 const CustomVideoPlayer = () => {
   // Recoil states :
