@@ -57,7 +57,9 @@ const CustomVideoPlayer = () => {
     console.log("Handling next video heyy");
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:51040/api/videosFromStorageLabelled');
+      const response = await fetch(
+        "http://localhost:51040/api/videosFromStorageLabelled"
+      );
       const data = await response.json();
       if (data.url) {
         await fetchVideo(data.url);
@@ -65,54 +67,57 @@ const CustomVideoPlayer = () => {
         setVideoFilename(data.videoFilename);
         setDanceSteps(data.steps);
         fetch(`http://localhost:51040/get_frame_info`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ videoFilename: data.videoFilename }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ videoFilename: data.videoFilename }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to get frame info");
+            }
+            return response.json();
           })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Failed to get frame info");
-              }
-              return response.json();
-            })
-            .then((frameData) => {
-              const frameRate = parseInt(frameData.frameRate);
-              console.log("Dude the frame rate came out to be :", frameRate, "And the name of video is :", frameData.videoFilename);
-              
-              setFrameRate(frameRate);
-              
-              console.log("The dance steps values are : ", danceSteps);
-            })
-            .catch((error) =>
-              console.error("Error getting frame rate:", error)
+          .then((frameData) => {
+            const frameRate = parseInt(frameData.frameRate);
+            console.log(
+              "Dude the frame rate came out to be :",
+              frameRate,
+              "And the name of video is :",
+              frameData.videoFilename
             );
+
+            setFrameRate(frameRate);
+
+            console.log("The dance steps values are : ", danceSteps);
+          })
+          .catch((error) => console.error("Error getting frame rate:", error));
       } else {
-        console.error('Error fetching video:', data.error);
+        console.error("Error fetching video:", data.error);
       }
     } catch (error) {
-      console.error('Error fetching video:', error);
+      console.error("Error fetching video:", error);
     }
     setLoading(false);
   };
 
   const fetchVideo = async (url) => {
     try {
-      const response = await fetch('http://localhost:51040/api/fetch_video', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:51040/api/fetch_video", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),
       });
       const data = await response.json();
-      if (data.message === 'Video fetched') {
+      if (data.message === "Video fetched") {
         setVideoUrl(data.videoUrl);
         console.log("the video url is : ", videoUrl);
       } else {
-        console.error('Error fetching video:', data.error);
+        console.error("Error fetching video:", data.error);
       }
     } catch (error) {
-      console.error('Error fetching video:', error);
+      console.error("Error fetching video:", error);
     }
   };
 
@@ -192,7 +197,7 @@ const CustomVideoPlayer = () => {
   }, [currentStepIndex]);
 
   const handleNextStep = () => {
-    console.log("Current value of step is this :", currentStep.newStepId);
+    console.log("Current value of step is :", currentStep.newStepId);
     var nextStep = null;
     if (currentStep.newStepId + 1 < danceSteps.length) {
       nextStep = danceSteps[currentStep.newStepId + 1];
@@ -230,7 +235,7 @@ const CustomVideoPlayer = () => {
         <button onClick={toggleMirroring}>
           {mirrored ? "Unmirror" : "Mirror"}
         </button>
-        <button onClick={fetchRandomVideo}>Fetch New Video</button> 
+        <button onClick={fetchRandomVideo}>Fetch New Video</button>
         {/* Additional control buttons */}
       </div>
       <div className="right-controls">
