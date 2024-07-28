@@ -84,7 +84,7 @@ const Keyframes = () => {
 
   const fetchProbableEndFrames = async (startFrame) => {
     const response = await fetch(
-      "https://20.102.110.12:8000/api/get_probable_end_frames",
+      "http://20.102.110.12:8000/api/get_probable_end_frames",
       {
         method: "POST",
         headers: {

@@ -152,13 +152,13 @@ const VideoPlayer = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://20.102.110.12:8000/api/videosFromStorage"
+        "http://20.102.110.12:8000/api/videosFromStorage"
       );
       const data = await response.json();
       if (data.url) {
         await fetchVideo(data.url);
         setVideoFilename(data.videoFilename);
-        fetch(`https://20.102.110.12:8000/get_frame_info`, {
+        fetch(`http://20.102.110.12:8000/get_frame_info`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -195,7 +195,7 @@ const VideoPlayer = () => {
   const fetchVideo = async (url) => {
     try {
       const response = await fetch(
-        "https://20.102.110.12:8000/api/fetch_video",
+        "http://20.102.110.12:8000/api/fetch_video",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
