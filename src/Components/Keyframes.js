@@ -45,11 +45,11 @@ const Keyframes = () => {
   const [selectedComponents, setSelectedComponents] = useState([]);
   const [showComponentPopup, setShowComponentPopup] = useState(false);
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/");
-    }
-  }, [isLoggedIn, navigate]);
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     navigate("/");
+  //   }
+  // }, [isLoggedIn, navigate]);
 
   const handleAddKeyframeIn = () => {
     const frameNumber = Math.floor(
