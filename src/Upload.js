@@ -12,7 +12,7 @@ const Upload = () => {
     const formData = new FormData();
     formData.append("video", selectedFile);
     console.log("FIlename is:", selectedFile);
-    await fetch("http://20.102.110.12:8000/api/upload", {
+    await fetch("https://20.102.110.12:8000/api/upload", {
       method: "POST",
       body: formData,
     });

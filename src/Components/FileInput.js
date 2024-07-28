@@ -23,7 +23,7 @@ const FileInput = () => {
       formData.append("video", file);
       setVideoFilename(file.name);
       console.log("File name is ", file.name);
-      fetch("http://20.102.110.12:8000/upload", {
+      fetch("https://20.102.110.12:8000/upload", {
         method: "POST",
         body: formData,
       })
@@ -38,7 +38,7 @@ const FileInput = () => {
             videoUrl: data.videoUrl,
           });
           setThumbnailUrl(data.thumbnailUrl);
-          fetch(`http://20.102.110.12:8000/get_frame_info`, {
+          fetch(`https://20.102.110.12:8000/get_frame_info`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
