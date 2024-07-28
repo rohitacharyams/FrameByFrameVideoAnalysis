@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const Upload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -10,13 +10,13 @@ const Upload = () => {
 
   const handleUpload = async () => {
     const formData = new FormData();
-    formData.append('video', selectedFile);
+    formData.append("video", selectedFile);
     console.log("FIlename is:", selectedFile);
-    await fetch('http://localhost:51040/api/upload', {
-      method: 'POST',
+    await fetch("http://20.102.110.12:8000/api/upload", {
+      method: "POST",
       body: formData,
     });
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   return (

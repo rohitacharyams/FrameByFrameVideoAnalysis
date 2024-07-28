@@ -58,7 +58,7 @@ const CustomVideoPlayer = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:51040/api/videosFromStorageLabelled"
+        "http://20.102.110.12:8000/api/videosFromStorageLabelled"
       );
       const data = await response.json();
       if (data.url) {
@@ -66,7 +66,7 @@ const CustomVideoPlayer = () => {
         console.log("The data is :", data);
         setVideoFilename(data.videoFilename);
         setDanceSteps(data.steps);
-        fetch(`http://localhost:51040/get_frame_info`, {
+        fetch(`http://20.102.110.12:8000/get_frame_info`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -104,11 +104,14 @@ const CustomVideoPlayer = () => {
 
   const fetchVideo = async (url) => {
     try {
-      const response = await fetch("http://localhost:51040/api/fetch_video", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
+      const response = await fetch(
+        "http://20.102.110.12:8000/api/fetch_video",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        }
+      );
       const data = await response.json();
       if (data.message === "Video fetched") {
         setVideoUrl(data.videoUrl);

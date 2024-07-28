@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
+import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
 
 const Reels = () => {
   const [videos, setVideos] = useState([]);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [thumbnailSrc, setThumbnailSrc] = useState('');
-  const [selectedVideoId, setSelectedVideoId] = useState('');
+  const [thumbnailSrc, setThumbnailSrc] = useState("");
+  const [selectedVideoId, setSelectedVideoId] = useState("");
   const [dancerId, setDancerId] = useState(null);
   const [keypoints, setKeypoints] = useState(null);
   const [bboxInfo, setBboxInfo] = useState([]);
@@ -19,7 +19,7 @@ const Reels = () => {
 
   const fetchVideos = async () => {
     try {
-      const response = await fetch('http://localhost:51040/api/videos');
+      const response = await fetch("http://20.102.110.12:8000/api/videos");
       if (!response.ok) {
         console.error(`Error fetching videos: ${response.statusText}`);
         return;
@@ -27,7 +27,7 @@ const Reels = () => {
       const data = await response.json();
       setVideos(data);
     } catch (error) {
-      console.error('Error fetching videos:', error);
+      console.error("Error fetching videos:", error);
     }
   };
 
@@ -40,28 +40,34 @@ const Reels = () => {
   };
 
   const getVideoSrc = (videoId) => {
-    return `http://localhost:51040/api/video/${videoId}`;
+    return `http://20.102.110.12:8000/api/video/${videoId}`;
   };
 
   const handleLearnAndCompare = async (videoId) => {
     try {
-      const response = await fetch(`http://localhost:51040/api/composite_thumbnail/${videoId}`);
+      const response = await fetch(
+        `http://20.102.110.12:8000/api/composite_thumbnail/${videoId}`
+      );
       if (!response.ok) {
-        console.error(`Error fetching composite thumbnail: ${response.statusText}`);
+        console.error(
+          `Error fetching composite thumbnail: ${response.statusText}`
+        );
         return;
       }
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       setThumbnailSrc(url);
 
-      const bboxResponse = await fetch(`http://localhost:51040/api/bbox_info/${videoId}`);
+      const bboxResponse = await fetch(
+        `http://20.102.110.12:8000/api/bbox_info/${videoId}`
+      );
       const bboxData = await bboxResponse.json();
       setBboxInfo(bboxData);
 
       setSelectedVideoId(videoId);
       setModalIsOpen(true);
     } catch (error) {
-      console.error('Error fetching composite thumbnail or bbox info:', error);
+      console.error("Error fetching composite thumbnail or bbox info:", error);
     }
   };
 
@@ -70,18 +76,29 @@ const Reels = () => {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    const clickedTrackId = bboxInfo.find(bbox => x >= bbox.bbox[0] && x <= bbox.bbox[2] && y >= bbox.bbox[1] && y <= bbox.bbox[3])?.track_id;
+    const clickedTrackId = bboxInfo.find(
+      (bbox) =>
+        x >= bbox.bbox[0] &&
+        x <= bbox.bbox[2] &&
+        y >= bbox.bbox[1] &&
+        y <= bbox.bbox[3]
+    )?.track_id;
 
     if (clickedTrackId) {
-      fetch(`http://localhost:51040/api/keypoints/${selectedVideoId}/${clickedTrackId}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log('Dancer ID:', clickedTrackId);
-          console.log('Keypoints:', data);
+      fetch(
+        `http://20.102.110.12:8000/api/keypoints/${selectedVideoId}/${clickedTrackId}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Dancer ID:", clickedTrackId);
+          console.log("Keypoints:", data);
 
           if (adminMode) {
-            setSelectedDancers(prev => {
-              const newDancers = [...prev, { dancerId: clickedTrackId, keypoints: data }];
+            setSelectedDancers((prev) => {
+              const newDancers = [
+                ...prev,
+                { dancerId: clickedTrackId, keypoints: data },
+              ];
               console.log("New dancers length before:", newDancers);
               if (newDancers.length >= 2) {
                 console.log("New dancers length is:", newDancers);
@@ -95,8 +112,8 @@ const Reels = () => {
             setModalIsOpen(false);
           }
         })
-        .catch(error => {
-          console.error('Error fetching dancer keypoints:', error);
+        .catch((error) => {
+          console.error("Error fetching dancer keypoints:", error);
         });
     }
   };
@@ -104,7 +121,7 @@ const Reels = () => {
   useEffect(() => {
     if (selectedDancers.length === 2) {
       // Perform comparison between selectedDancers[0] and selectedDancers[1]
-      console.log('Comparing dancers:', selectedDancers);
+      console.log("Comparing dancers:", selectedDancers);
       // Add your comparison logic here
     }
   }, [selectedDancers]);
@@ -116,15 +133,20 @@ const Reels = () => {
       </div>
       {videos.length > 0 ? (
         videos.map((video, index) => (
-          <div key={index} className={`w-screen h-screen ${index === currentVideoIndex ? 'block' : 'hidden'}`}>
+          <div
+            key={index}
+            className={`w-screen h-screen ${
+              index === currentVideoIndex ? "block" : "hidden"
+            }`}
+          >
             <video
               src={getVideoSrc(video.video_id)}
               controls
               autoPlay={true}
               className="w-full h-full"
             />
-            <button 
-              onClick={() => handleLearnAndCompare(video.video_id)} 
+            <button
+              onClick={() => handleLearnAndCompare(video.video_id)}
               className="absolute bottom-4 left-4 px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded"
             >
               Learn and Compare
@@ -134,11 +156,11 @@ const Reels = () => {
       ) : (
         <p>Loading...</p>
       )}
-      <button 
+      <button
         onClick={() => setAdminMode(!adminMode)}
         className="fixed bottom-4 right-4 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
       >
-        {adminMode ? 'Exit Admin Mode' : 'Enter Admin Mode'}
+        {adminMode ? "Exit Admin Mode" : "Enter Admin Mode"}
       </button>
       <Modal
         isOpen={modalIsOpen}
@@ -146,12 +168,12 @@ const Reels = () => {
         contentLabel="Select a Dancer"
         style={{
           content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
           },
         }}
       >
@@ -162,7 +184,7 @@ const Reels = () => {
           onClick={handleThumbnailClick}
           className="cursor-pointer"
         />
-        <button 
+        <button
           onClick={() => setModalIsOpen(false)}
           className="mt-4 px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded"
         >

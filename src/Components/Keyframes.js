@@ -45,7 +45,6 @@ const Keyframes = () => {
   const [selectedComponents, setSelectedComponents] = useState([]);
   const [showComponentPopup, setShowComponentPopup] = useState(false);
 
-
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");
@@ -85,7 +84,7 @@ const Keyframes = () => {
 
   const fetchProbableEndFrames = async (startFrame) => {
     const response = await fetch(
-      "http://localhost:51040/api/get_probable_end_frames",
+      "http://20.102.110.12:8000/api/get_probable_end_frames",
       {
         method: "POST",
         headers: {
@@ -186,7 +185,7 @@ const Keyframes = () => {
       }
     });
   };
-  
+
   const saveComponentSelection = () => {
     const newStep = {
       keyFrameIn: KeyFrameTypeNumber.keyFrameInFrameNmber,
@@ -214,7 +213,7 @@ const Keyframes = () => {
       "And the dance steps are :",
       danceSteps
     );
-    fetch("http://localhost:51040/save_keyframes", {
+    fetch("http://20.102.110.12:8000/save_keyframes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -279,17 +278,21 @@ const Keyframes = () => {
             <div className="bg-white p-6 rounded-lg max-w-md w-full">
               <h2 className="text-xl mb-4">Select Influencing Components</h2>
               <div className="flex flex-col items-center space-y-4">
-                {["vocals", "drums", "bass", "other", "guitar", "piano"].map((component) => (
-                  <button
-                    key={component}
-                    onClick={() => handleComponentSelection(component)}
-                    className={`${
-                      selectedComponents.includes(component) ? "bg-blue-500" : "bg-gray-500"
-                    } text-white hover:bg-gray-400 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50`}
-                  >
-                    {component}
-                  </button>
-                ))}
+                {["vocals", "drums", "bass", "other", "guitar", "piano"].map(
+                  (component) => (
+                    <button
+                      key={component}
+                      onClick={() => handleComponentSelection(component)}
+                      className={`${
+                        selectedComponents.includes(component)
+                          ? "bg-blue-500"
+                          : "bg-gray-500"
+                      } text-white hover:bg-gray-400 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50`}
+                    >
+                      {component}
+                    </button>
+                  )
+                )}
               </div>
               <button
                 onClick={saveComponentSelection}

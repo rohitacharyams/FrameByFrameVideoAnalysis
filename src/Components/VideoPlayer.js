@@ -49,7 +49,9 @@ const VideoPlayer = () => {
   const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
   const [videoState, setVideoState] = useRecoilState(videoStateAtom);
   const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
-  const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useRecoilState(KeyFrameTypeNumberAtom);
+  const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useRecoilState(
+    KeyFrameTypeNumberAtom
+  );
 
   // For videos from blob store
   const [currentVideo, setCurrentVideo] = useState(null);
@@ -63,8 +65,8 @@ const VideoPlayer = () => {
   const playerContainerRef = useRef(null);
   const canvasRef = useRef(null);
   const [playbackRate, setPlaybackRate] = useState(1);
-  
-  // For video timeline 
+
+  // For video timeline
   const [frames, setFrames] = useState([]);
   const [frameCount, setFrameCount] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -98,7 +100,7 @@ const VideoPlayer = () => {
 
   const handleSeek = (index) => {
     const seekTo = (index / frameCount) * playerRef.current.getDuration();
-    playerRef.current.seekTo(seekTo, 'seconds');
+    playerRef.current.seekTo(seekTo, "seconds");
     setPlaying(true);
   };
 
@@ -145,63 +147,70 @@ const VideoPlayer = () => {
     play();
   };
 
-
   const fetchRandomVideo = async () => {
     console.log("Handling next video heyy");
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:51040/api/videosFromStorage');
+      const response = await fetch(
+        "http://20.102.110.12:8000/api/videosFromStorage"
+      );
       const data = await response.json();
       if (data.url) {
         await fetchVideo(data.url);
         setVideoFilename(data.videoFilename);
-        fetch(`http://localhost:51040/get_frame_info`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ videoFilename: data.videoFilename }),
+        fetch(`http://20.102.110.12:8000/get_frame_info`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ videoFilename: data.videoFilename }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to get frame info");
+            }
+            return response.json();
           })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Failed to get frame info");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              const frameRate = parseInt(data.frameRate);
-              console.log("Dude the frame rate came out to be :", frameRate, "And the name of video is :", data.videoFilename);
-              
-              setFrameRate(frameRate);
-            })
-            .catch((error) =>
-              console.error("Error getting frame rate:", error)
+          .then((data) => {
+            const frameRate = parseInt(data.frameRate);
+            console.log(
+              "Dude the frame rate came out to be :",
+              frameRate,
+              "And the name of video is :",
+              data.videoFilename
             );
+
+            setFrameRate(frameRate);
+          })
+          .catch((error) => console.error("Error getting frame rate:", error));
       } else {
-        console.error('Error fetching video:', data.error);
+        console.error("Error fetching video:", data.error);
       }
     } catch (error) {
-      console.error('Error fetching video:', error);
+      console.error("Error fetching video:", error);
     }
     setLoading(false);
   };
 
   const fetchVideo = async (url) => {
     try {
-      const response = await fetch('http://localhost:51040/api/fetch_video', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
-      });
+      const response = await fetch(
+        "http://20.102.110.12:8000/api/fetch_video",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        }
+      );
       const data = await response.json();
-      if (data.message === 'Video fetched') {
+      if (data.message === "Video fetched") {
         setVideoUrl(data.videoUrl);
         console.log("the video url is : ", videoUrl);
       } else {
-        console.error('Error fetching video:', data.error);
+        console.error("Error fetching video:", data.error);
       }
     } catch (error) {
-      console.error('Error fetching video:', error);
+      console.error("Error fetching video:", error);
     }
   };
 
@@ -333,7 +342,7 @@ const VideoPlayer = () => {
                 ref={playerRef}
                 url={videoInfo.videoUrl ? videoInfo.videoUrl : videoUrl}
                 playing={playing}
-                controls = {true}
+                controls={true}
                 playbackRate={playbackRate}
                 width="100%"
                 height="400px"
@@ -367,12 +376,12 @@ const VideoPlayer = () => {
             </div>
             <Box>
               <Box sx={{ display: "flex", gap: 2 }}>
-              <Button variant="contained" onClick={handlePreviousVideo}>
-                Previous Video
-              </Button>
-              <Button variant="contained" onClick={handleNextVideo}>
-                Next Video
-              </Button>
+                <Button variant="contained" onClick={handlePreviousVideo}>
+                  Previous Video
+                </Button>
+                <Button variant="contained" onClick={handleNextVideo}>
+                  Next Video
+                </Button>
               </Box>
             </Box>
 
@@ -385,7 +394,6 @@ const VideoPlayer = () => {
       </div>
     </VideoPlayerContext.Provider>
   );
-
 };
 
 const VideoPlayerProvider = ({ children }) => {
