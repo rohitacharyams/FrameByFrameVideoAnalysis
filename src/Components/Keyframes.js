@@ -84,7 +84,7 @@ const Keyframes = () => {
 
   const fetchProbableEndFrames = async (startFrame) => {
     const response = await fetch(
-      "http://20.102.110.12:8000/api/get_probable_end_frames",
+      "https://danceai.us-cdp2.choreoapps.dev/api/get_probable_end_frames",
       {
         method: "POST",
         headers: {
@@ -213,7 +213,7 @@ const Keyframes = () => {
       "And the dance steps are :",
       danceSteps
     );
-    fetch("http://20.102.110.12:8000/save_keyframes", {
+    fetch("https://danceai.us-cdp2.choreoapps.dev/save_keyframes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
