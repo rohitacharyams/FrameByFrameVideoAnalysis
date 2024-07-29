@@ -12,7 +12,7 @@ const Upload = () => {
     const formData = new FormData();
     formData.append("video", selectedFile);
     console.log("FIlename is:", selectedFile);
-    await fetch("https://danceai.us-cdp2.choreoapps.dev/api/upload", {
+    await fetch("https://danceaibackend.us-cdp2.choreoapps.dev/api/upload", {
       method: "POST",
       body: formData,
     });

@@ -58,7 +58,7 @@ const CustomVideoPlayer = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://danceai.us-cdp2.choreoapps.dev/api/videosFromStorageLabelled"
+        "https://danceaibackend.us-cdp2.choreoapps.dev/api/videosFromStorageLabelled"
       );
       const data = await response.json();
       if (data.url) {
@@ -66,7 +66,7 @@ const CustomVideoPlayer = () => {
         console.log("The data is :", data);
         setVideoFilename(data.videoFilename);
         setDanceSteps(data.steps);
-        fetch(`https://danceai.us-cdp2.choreoapps.dev/get_frame_info`, {
+        fetch(`https://danceaibackend.us-cdp2.choreoapps.dev/get_frame_info`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -105,7 +105,7 @@ const CustomVideoPlayer = () => {
   const fetchVideo = async (url) => {
     try {
       const response = await fetch(
-        "https://danceai.us-cdp2.choreoapps.dev/api/fetch_video",
+        "https://danceaibackend.us-cdp2.choreoapps.dev/api/fetch_video",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -115,7 +115,7 @@ const CustomVideoPlayer = () => {
       const data = await response.json();
       if (data.message === "Video fetched") {
         setVideoUrl(data.videoUrl);
-        console.log("the video url is : ", videoUrl);
+        console.log("the video url is : ", data.videoUrl);
       } else {
         console.error("Error fetching video:", data.error);
       }

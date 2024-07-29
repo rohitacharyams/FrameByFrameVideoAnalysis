@@ -23,7 +23,7 @@ const FileInput = () => {
       formData.append("video", file);
       setVideoFilename(file.name);
       console.log("File name is ", file.name);
-      fetch("https://danceai.us-cdp2.choreoapps.dev/upload", {
+      fetch("https://danceaibackend.us-cdp2.choreoapps.dev/upload", {
         method: "POST",
         body: formData,
       })
@@ -38,13 +38,16 @@ const FileInput = () => {
             videoUrl: data.videoUrl,
           });
           setThumbnailUrl(data.thumbnailUrl);
-          fetch(`https://danceai.us-cdp2.choreoapps.dev/get_frame_info`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ videoFilename: file.name }),
-          })
+          fetch(
+            `https://danceaibackend.us-cdp2.choreoapps.dev/get_frame_info`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ videoFilename: file.name }),
+            }
+          )
             .then((response) => {
               if (!response.ok) {
                 throw new Error("Failed to get frame info");
