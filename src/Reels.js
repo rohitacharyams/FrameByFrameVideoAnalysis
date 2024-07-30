@@ -20,7 +20,7 @@ const Reels = () => {
   const fetchVideos = async () => {
     try {
       const response = await fetch(
-        "https://danceaibackend.us-cdp2.choreoapps.dev/api/videos"
+        "https://danceai.azurewebsites.net//api/videos"
       );
       if (!response.ok) {
         console.error(`Error fetching videos: ${response.statusText}`);
@@ -42,13 +42,13 @@ const Reels = () => {
   };
 
   const getVideoSrc = (videoId) => {
-    return `https://danceaibackend.us-cdp2.choreoapps.dev/api/video/${videoId}`;
+    return `https://danceai.azurewebsites.net//api/video/${videoId}`;
   };
 
   const handleLearnAndCompare = async (videoId) => {
     try {
       const response = await fetch(
-        `https://danceaibackend.us-cdp2.choreoapps.dev/api/composite_thumbnail/${videoId}`
+        `https://danceai.azurewebsites.net//api/composite_thumbnail/${videoId}`
       );
       if (!response.ok) {
         console.error(
@@ -61,7 +61,7 @@ const Reels = () => {
       setThumbnailSrc(url);
 
       const bboxResponse = await fetch(
-        `https://danceaibackend.us-cdp2.choreoapps.dev/api/bbox_info/${videoId}`
+        `https://danceai.azurewebsites.net//api/bbox_info/${videoId}`
       );
       const bboxData = await bboxResponse.json();
       setBboxInfo(bboxData);
@@ -88,7 +88,7 @@ const Reels = () => {
 
     if (clickedTrackId) {
       fetch(
-        `https://danceaibackend.us-cdp2.choreoapps.dev/api/keypoints/${selectedVideoId}/${clickedTrackId}`
+        `https://danceai.azurewebsites.net//api/keypoints/${selectedVideoId}/${clickedTrackId}`
       )
         .then((response) => response.json())
         .then((data) => {

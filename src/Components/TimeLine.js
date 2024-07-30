@@ -35,7 +35,7 @@ const Timeline = () => {
           onClick={() => handleFrameClick(frame)}
         >
           <VideoThumbnail
-            videoUrl="https://danceaibackend.us-cdp2.choreoapps.dev/upload/boy_-_21827 (Original).mp4"
+            videoUrl="https://danceai.azurewebsites.net//upload/boy_-_21827 (Original).mp4"
             width={ThumbnailWidth}
             height={60} // Adjust the height as needed
             frameCount={100} // Total number of frames in your video

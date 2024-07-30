@@ -152,13 +152,13 @@ const VideoPlayer = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://danceaibackend.us-cdp2.choreoapps.dev/api/videosFromStorage"
+        "https://danceai.azurewebsites.net//api/videosFromStorage"
       );
       const data = await response.json();
       if (data.url) {
         await fetchVideo(data.url);
         setVideoFilename(data.videoFilename);
-        fetch(`https://danceaibackend.us-cdp2.choreoapps.dev/get_frame_info`, {
+        fetch(`https://danceai.azurewebsites.net//get_frame_info`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -195,7 +195,7 @@ const VideoPlayer = () => {
   const fetchVideo = async (url) => {
     try {
       const response = await fetch(
-        "https://danceaibackend.us-cdp2.choreoapps.dev/api/fetch_video",
+        "https://danceai.azurewebsites.net//api/fetch_video",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
