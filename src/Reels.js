@@ -20,7 +20,7 @@ const Reels = () => {
   const fetchVideos = async () => {
     try {
       const response = await fetch(
-        "https://danceai.azurewebsites.net//api/videos"
+        "http://localhost:51040//api/videos"
       );
       if (!response.ok) {
         console.error(`Error fetching videos: ${response.statusText}`);
@@ -42,13 +42,13 @@ const Reels = () => {
   };
 
   const getVideoSrc = (videoId) => {
-    return `https://danceai.azurewebsites.net//api/video/${videoId}`;
+    return `http://localhost:51040//api/video/${videoId}`;
   };
 
   const handleLearnAndCompare = async (videoId) => {
     try {
       const response = await fetch(
-        `https://danceai.azurewebsites.net//api/composite_thumbnail/${videoId}`
+        `http://localhost:51040//api/composite_thumbnail/${videoId}`
       );
       if (!response.ok) {
         console.error(
@@ -61,7 +61,7 @@ const Reels = () => {
       setThumbnailSrc(url);
 
       const bboxResponse = await fetch(
-        `https://danceai.azurewebsites.net//api/bbox_info/${videoId}`
+        `http://localhost:51040//api/bbox_info/${videoId}`
       );
       const bboxData = await bboxResponse.json();
       setBboxInfo(bboxData);
@@ -88,7 +88,7 @@ const Reels = () => {
 
     if (clickedTrackId) {
       fetch(
-        `https://danceai.azurewebsites.net//api/keypoints/${selectedVideoId}/${clickedTrackId}`
+        `http://localhost:51040//api/keypoints/${selectedVideoId}/${clickedTrackId}`
       )
         .then((response) => response.json())
         .then((data) => {

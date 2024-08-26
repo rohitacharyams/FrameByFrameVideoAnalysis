@@ -12,7 +12,7 @@ const Upload = () => {
     const formData = new FormData();
     formData.append("video", selectedFile);
     console.log("FIlename is:", selectedFile);
-    await fetch("https://danceai.azurewebsites.net//api/upload", {
+    await fetch("http://localhost:51040//api/upload", {
       method: "POST",
       body: formData,
     });

@@ -23,7 +23,7 @@ const FileInput = () => {
       formData.append("video", file);
       setVideoFilename(file.name);
       console.log("File name is ", file.name);
-      fetch("https://danceai.azurewebsites.net//upload", {
+      fetch("http://localhost:51040//upload", {
         method: "POST",
         body: formData,
       })
@@ -38,7 +38,7 @@ const FileInput = () => {
             videoUrl: data.videoUrl,
           });
           setThumbnailUrl(data.thumbnailUrl);
-          fetch(`https://danceai.azurewebsites.net//get_frame_info`, {
+          fetch(`http://localhost:51040//get_frame_info`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

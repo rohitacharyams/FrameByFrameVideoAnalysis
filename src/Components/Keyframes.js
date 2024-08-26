@@ -84,7 +84,7 @@ const Keyframes = () => {
 
   const fetchProbableEndFrames = async (startFrame) => {
     const response = await fetch(
-      "https://danceai.azurewebsites.net//api/get_probable_end_frames",
+      "http://localhost:51040//api/get_probable_end_frames",
       {
         method: "POST",
         headers: {
@@ -213,7 +213,7 @@ const Keyframes = () => {
       "And the dance steps are :",
       danceSteps
     );
-    fetch("https://danceai.azurewebsites.net//save_keyframes", {
+    fetch("http://localhost:51040//save_keyframes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

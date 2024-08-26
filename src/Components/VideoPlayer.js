@@ -25,6 +25,7 @@ import {
   videoStateAtom,
   videoFilenameAtom,
   KeyFrameTypeNumberAtom,
+  danceStepsAtom,
 } from "../Recoil/atoms";
 
 const theme = createTheme({
@@ -49,6 +50,7 @@ const VideoPlayer = () => {
   const [stepFrames, setStepFrames] = useRecoilState(stepFramesAtom);
   const [videoState, setVideoState] = useRecoilState(videoStateAtom);
   const [videoFilename, setVideoFilename] = useRecoilState(videoFilenameAtom);
+  const [danceSteps, setDanceSteps] = useRecoilState(danceStepsAtom);
   const [KeyFrameTypeNumber, setKeyFrameTypeNumber] = useRecoilState(
     KeyFrameTypeNumberAtom
   );
@@ -152,13 +154,13 @@ const VideoPlayer = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://danceai.azurewebsites.net//api/videosFromStorage"
+        "http://localhost:51040//api/videosFromStorage"
       );
       const data = await response.json();
       if (data.url) {
         await fetchVideo(data.url);
         setVideoFilename(data.videoFilename);
-        fetch(`https://danceai.azurewebsites.net//get_frame_info`, {
+        fetch(`http://localhost:51040//get_frame_info`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -181,6 +183,8 @@ const VideoPlayer = () => {
             );
 
             setFrameRate(frameRate);
+            console.log("The dance steps values are : ", data.steps);
+            setDanceSteps(data.steps);
           })
           .catch((error) => console.error("Error getting frame rate:", error));
       } else {
@@ -195,7 +199,7 @@ const VideoPlayer = () => {
   const fetchVideo = async (url) => {
     try {
       const response = await fetch(
-        "https://danceai.azurewebsites.net//api/fetch_video",
+        "http://localhost:51040//api/fetch_video",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
