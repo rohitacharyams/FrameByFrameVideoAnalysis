@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../firebase/authContext";
 import { doSignOut } from "../../firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const settings = ["Profile", "Dashboard", "Logout"];
 
@@ -9,6 +10,7 @@ function ProfileIcon() {
   const menuRef = useRef(null);
   const { currentUser } = useAuth();
   const [imageUrl, setImageUrl] = useState(currentUser?.photoURL);
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -22,6 +24,7 @@ function ProfileIcon() {
     console.log(`${setting} clicked`);
     switch (setting) {
       case "Profile":
+        navigate("/profile");
         break;
       case "Dashboard":
         break;

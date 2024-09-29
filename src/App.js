@@ -9,6 +9,8 @@ import Navbar from "./Components/Navbar/Navbar";
 import "./App.css";
 import HomePage from "./Components/HomePages/HomePage";
 import HomePageAuth from "./Components/HomePages/HomePageAuth";
+import Profile from "./Components/ProfileSection/Profile";
+import SideBar from "./Components/HomePages/SideBar";
 
 const App = () => {
   const playerRef = useRef(null);
@@ -31,6 +33,19 @@ const App = () => {
             element={
               <>
                 <HomePageAuth />
+              </>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <>
+                <div className="flex h-screen">
+                  <SideBar />
+                  <div className="flex-grow">
+                    <Profile />
+                  </div>
+                </div>
               </>
             }
           />
